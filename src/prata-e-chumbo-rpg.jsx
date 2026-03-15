@@ -2968,13 +2968,7 @@ function CharSheet({char,update}) {
         )}
 
         {/* ── TAB 5: COMPANHEIRO ── */}
-        {tab===5&&(()=>{
-          const mont = char.montaria;
-          const montImgRef = React.createRef();
-          const montVidaBase = mont.vidaBase ?? 6;
-          const montVidaAtual = mont.vidaAtual ?? montVidaBase;
-          const montDorAtivos = mont.circulosDorAtivos || [];
-          return (
+        {tab===5&&(
           <div>
             {/* ── Identidade + Foto ── */}
             <SectionTitle>Identidade do Companheiro</SectionTitle>
@@ -2982,57 +2976,68 @@ function CharSheet({char,update}) {
               {/* Foto */}
               <div
                 onClick={()=>{const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>updMont("imagem",ev.target.result);r.readAsDataURL(f);};inp.click();}}
-                style={{width:96,height:116,flexShrink:0,border:`1px dashed ${C.border2}`,cursor:"pointer",background:mont.imagem?`url(${mont.imagem}) center/cover`:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",position:"relative"}}>
-                {!mont.imagem&&<span style={{fontSize:9,color:C.grayDark,letterSpacing:2,textAlign:"center",padding:8,textTransform:"uppercase",fontFamily:"'Sora',system-ui,sans-serif"}}>Foto</span>}
-                {mont.imagem&&<div style={{position:"absolute",bottom:0,right:0,padding:"2px 4px",background:"rgba(0,0,0,0.7)",fontSize:8,color:C.grayDark,cursor:"pointer",fontFamily:"'Inter',system-ui,sans-serif"}} onClick={e=>{e.stopPropagation();updMont("imagem",null);}}>✕</div>}
+                style={{width:96,height:116,flexShrink:0,border:`1px dashed ${C.border2}`,cursor:"pointer",background:char.montaria.imagem?`url(${char.montaria.imagem}) center/cover`:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",position:"relative"}}>
+                {!char.montaria.imagem&&<span style={{fontSize:9,color:C.grayDark,letterSpacing:2,textAlign:"center",padding:8,textTransform:"uppercase",fontFamily:"'Sora',system-ui,sans-serif"}}>Foto</span>}
+                {char.montaria.imagem&&<div style={{position:"absolute",bottom:0,right:0,padding:"2px 4px",background:"rgba(0,0,0,0.7)",fontSize:8,color:C.grayDark,cursor:"pointer",fontFamily:"'Inter',system-ui,sans-serif"}} onClick={e=>{e.stopPropagation();updMont("imagem",null);}}>✕</div>}
               </div>
               {/* Nome + tipo */}
               <div style={{flex:1,minWidth:180}}>
                 <div style={{marginBottom:12}}>
                   <span style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase"}}>Nome</span>
-                  <Inp value={mont.nome} onChange={v=>updMont("nome",v)} placeholder="Nome do companheiro..."/>
+                  <Inp value={char.montaria.nome} onChange={v=>updMont("nome",v)} placeholder="Nome do companheiro..."/>
                 </div>
                 <div>
                   <span style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase"}}>Tipo</span>
-                  <select value={mont.tipo||"Cavalo"} onChange={e=>updMont("tipo",e.target.value)} style={{display:"block",background:C.bg2,border:`1px solid ${C.border}`,color:C.white,fontFamily:"'Inter',system-ui,sans-serif",fontSize:13,padding:"5px 10px",marginTop:4,width:"100%",outline:"none",cursor:"pointer"}}>
+                  <select value={char.montaria.tipo||"Cavalo"} onChange={e=>updMont("tipo",e.target.value)} style={{display:"block",background:C.bg2,border:`1px solid ${C.border}`,color:C.white,fontFamily:"'Inter',system-ui,sans-serif",fontSize:13,padding:"5px 10px",marginTop:4,width:"100%",outline:"none",cursor:"pointer"}}>
                     {["Cavalo","Burro","Mula","Jegue","Cachorro","Lobo","Cão de Guerra","Outro"].map(t=><option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
               </div>
             </div>
 
-            {/* ── Condições de combate ── */}
+            {/* ── Vida & Dor ── */}
             <SectionTitle>Vida & Condições de Combate</SectionTitle>
             <div style={{display:"flex",gap:24,flexWrap:"wrap",marginBottom:20,alignItems:"flex-start"}}>
               {/* Vida */}
               <div>
                 <div style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase",marginBottom:8}}>Círculos de Vida</div>
                 <div style={{display:"flex",flexWrap:"wrap",gap:6,alignItems:"center",marginBottom:8}}>
-                  {Array.from({length:montVidaBase}).map((_,i)=>(
-                    <Dot key={i} filled={i<montVidaAtual} danger onClick={()=>updMont("vidaAtual",i<montVidaAtual?i:i+1)}/>
+                  {Array.from({length:char.montaria.vidaBase??6}).map((_,i)=>(
+                    <Dot key={i} filled={i<(char.montaria.vidaAtual??char.montaria.vidaBase??6)} danger
+                      onClick={()=>{
+                        const base=char.montaria.vidaBase??6;
+                        const atual=char.montaria.vidaAtual??base;
+                        updMont("vidaAtual",i<atual?i:i+1);
+                      }}/>
                   ))}
-                  <button onClick={()=>updMont("vidaBase",montVidaBase+1)} style={{width:16,height:16,borderRadius:"50%",border:`1.5px dashed ${C.border2}`,background:"transparent",color:C.grayDark,cursor:"pointer",fontSize:10,padding:0,lineHeight:1}}>+</button>
-                  {montVidaBase>1&&<button onClick={()=>updMont("vidaBase",montVidaBase-1)} style={{width:16,height:16,borderRadius:"50%",border:`1.5px dashed ${C.border2}`,background:"transparent",color:C.grayDark,cursor:"pointer",fontSize:10,padding:0,lineHeight:1}}>−</button>}
+                  <button onClick={()=>updMont("vidaBase",(char.montaria.vidaBase??6)+1)} style={{width:16,height:16,borderRadius:"50%",border:`1.5px dashed ${C.border2}`,background:"transparent",color:C.grayDark,cursor:"pointer",fontSize:10,padding:0,lineHeight:1}}>+</button>
+                  {(char.montaria.vidaBase??6)>1&&<button onClick={()=>updMont("vidaBase",(char.montaria.vidaBase??6)-1)} style={{width:16,height:16,borderRadius:"50%",border:`1.5px dashed ${C.border2}`,background:"transparent",color:C.grayDark,cursor:"pointer",fontSize:10,padding:0,lineHeight:1}}>−</button>}
                 </div>
-                <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>{montVidaAtual}/{montVidaBase} · Resistência +1 Vida/pt</div>
+                <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>
+                  {char.montaria.vidaAtual??char.montaria.vidaBase??6}/{char.montaria.vidaBase??6} · Resistência +1 Vida/pt
+                </div>
               </div>
               {/* Dor */}
               <div>
                 <div style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase",marginBottom:8}}>Círculos de Dor</div>
                 <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>
                   {CIRCULOS_DOR.map((cd)=>{
-                    const ativo = montDorAtivos.includes(cd.num);
+                    const dorAtivos=char.montaria.circulosDorAtivos||[];
+                    const ativo=dorAtivos.includes(cd.num);
                     return (
-                      <div key={cd.num} onClick={()=>updMont("circulosDorAtivos",ativo?montDorAtivos.filter(x=>x!==cd.num):[...montDorAtivos,cd.num])}
+                      <div key={cd.num}
+                        onClick={()=>updMont("circulosDorAtivos",ativo?dorAtivos.filter(x=>x!==cd.num):[...dorAtivos,cd.num])}
                         style={{width:28,height:28,border:`1.5px solid ${ativo?C.red:C.border}`,background:ativo?"#300000":"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:ativo?C.red:C.grayDark}}>
                         {cd.num}
                       </div>
                     );
                   })}
                 </div>
-                {montDorAtivos.length>0&&(
+                {(char.montaria.circulosDorAtivos||[]).length>0&&(
                   <div style={{fontSize:10,color:C.red,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:1.8}}>
-                    {CIRCULOS_DOR.filter(cd=>montDorAtivos.includes(cd.num)).map(cd=><div key={cd.num}>● {cd.efeito}</div>)}
+                    {CIRCULOS_DOR.filter(cd=>(char.montaria.circulosDorAtivos||[]).includes(cd.num)).map(cd=>(
+                      <div key={cd.num}>● {cd.efeito}</div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -3040,54 +3045,64 @@ function CharSheet({char,update}) {
 
             {/* ── Stats de combate ── */}
             <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:24}}>
-              <StatBox label="Defesa" value={mont.defesa??5} onChange={v=>updMont("defesa",Math.max(1,v))} min={1} max={10}/>
-              <StatBox label="Ações" value={mont.acoes??1} onChange={v=>updMont("acoes",Math.max(1,v))} min={1} max={8}/>
-              <StatBox label="Movimentos" value={mont.movimentos??1} onChange={v=>updMont("movimentos",Math.max(1,v))} min={1} max={8}/>
-              <StatBox label="Potência" value={mont.potencia??0} onChange={v=>updMont("potencia",Math.max(0,v))} min={0} max={10}/>
-              <StatBox label="Resistência" value={mont.resistencia??0} onChange={v=>updMont("resistencia",Math.max(0,v))} min={0} max={10}/>
+              <StatBox label="Defesa"      value={char.montaria.defesa??5}      onChange={v=>updMont("defesa",Math.max(1,v))}     min={1} max={10}/>
+              <StatBox label="Ações"       value={char.montaria.acoes??1}       onChange={v=>updMont("acoes",Math.max(1,v))}      min={1} max={8}/>
+              <StatBox label="Movimentos"  value={char.montaria.movimentos??1}  onChange={v=>updMont("movimentos",Math.max(1,v))} min={1} max={8}/>
+              <StatBox label="Potência"    value={char.montaria.potencia??0}    onChange={v=>updMont("potencia",Math.max(0,v))}   min={0} max={10}/>
+              <StatBox label="Resistência" value={char.montaria.resistencia??0} onChange={v=>updMont("resistencia",Math.max(0,v))} min={0} max={10}/>
             </div>
 
             {/* ── Fidelidade ── */}
             <SectionTitle>Fidelidade</SectionTitle>
             <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
               {[0,1,2,3,4,5].map(n=>(
-                <button key={n} onClick={()=>updMont("fidelidade",n)} style={{width:40,height:40,border:`1px solid ${mont.fidelidade>=n?C.silver:C.border}`,background:mont.fidelidade>=n?C.bg3:"transparent",color:mont.fidelidade>=n?C.white:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,cursor:"pointer"}}>{n}</button>
+                <button key={n} onClick={()=>updMont("fidelidade",n)}
+                  style={{width:40,height:40,border:`1px solid ${char.montaria.fidelidade>=n?C.silver:C.border}`,background:char.montaria.fidelidade>=n?C.bg3:"transparent",color:char.montaria.fidelidade>=n?C.white:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,cursor:"pointer"}}>{n}</button>
               ))}
             </div>
             <div style={{fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:2.2,marginBottom:20}}>
               {[[0,"Estranha: sem bônus."],[1,"+1 Atributo (sua escolha)."],[2,"+1 Atributo (sua escolha)."],[3,"Sem penalidade para saltar obstáculos perigosos."],[4,"Atende quando chamada pelo nome."],[5,"Vem até você em raio de 500m quando chamada."]].map(([n,txt])=>(
-                <div key={n} style={{color:mont.fidelidade>=n?C.silver:C.grayDark}}><span style={{color:C.silverDim,marginRight:8}}>{n}</span>{txt}</div>
+                <div key={n} style={{color:char.montaria.fidelidade>=n?C.silver:C.grayDark}}>
+                  <span style={{color:C.silverDim,marginRight:8}}>{n}</span>{txt}
+                </div>
               ))}
             </div>
 
             {/* ── Habilidades ── */}
             <SectionTitle>Habilidades do Companheiro</SectionTitle>
             <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}}>
-              {(mont.habilidades||[]).map((h,i)=>(
+              {(char.montaria.habilidades||[]).map((h,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"4px 10px",border:`1px solid ${C.silver}`,background:C.bg3}}>
                   <span style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:12,color:C.white}}>{h}</span>
-                  <button onClick={()=>updMont("habilidades",mont.habilidades.filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:11,padding:0}}>✕</button>
+                  <button onClick={()=>updMont("habilidades",char.montaria.habilidades.filter((_,j)=>j!==i))}
+                    style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:11,padding:0}}>✕</button>
                 </div>
               ))}
             </div>
-            <AddHabForm onAdd={nome=>updMont("habilidades",[...(mont.habilidades||[]),nome])}/>
+            <AddHabForm onAdd={nome=>updMont("habilidades",[...(char.montaria.habilidades||[]),nome])}/>
 
             {/* ── Inventário ── */}
             <SectionTitle>Inventário do Companheiro</SectionTitle>
-            <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:10}}>Bolsa de montaria: +10 espaços adicionais. 1 Movimento montado = 10m.</div>
-            {(mont.inventario||[]).map((item,i)=>(
+            <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:10}}>
+              Bolsa de montaria: +10 espaços adicionais. 1 Movimento montado = 10m.
+            </div>
+            {(char.montaria.inventario||[]).map((item,i)=>(
               <div key={i} style={{display:"flex",gap:10,alignItems:"center",marginBottom:5}}>
                 <span style={{width:18,textAlign:"right",fontSize:10,color:C.border2,fontFamily:"'Inter',system-ui,sans-serif"}}>{i+1}</span>
                 <div style={{flex:1,borderBottom:`1px solid ${C.border}`}}>
-                  <input value={item} onChange={e=>{const inv=[...(mont.inventario||[])];inv[i]=e.target.value;updMont("inventario",inv);}} placeholder="item..." style={{background:"transparent",border:"none",outline:"none",color:C.white,fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,width:"100%",padding:"2px 0"}}/>
+                  <input value={item}
+                    onChange={e=>{const inv=[...(char.montaria.inventario||[])];inv[i]=e.target.value;updMont("inventario",inv);}}
+                    placeholder="item..."
+                    style={{background:"transparent",border:"none",outline:"none",color:C.white,fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,width:"100%",padding:"2px 0"}}/>
                 </div>
-                <button onClick={()=>updMont("inventario",(mont.inventario||[]).filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:12,padding:0}}>✕</button>
+                <button onClick={()=>updMont("inventario",(char.montaria.inventario||[]).filter((_,j)=>j!==i))}
+                  style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:12,padding:0}}>✕</button>
               </div>
             ))}
-            <button onClick={()=>updMont("inventario",[...(mont.inventario||[]),""])} style={{background:"transparent",border:`1px dashed ${C.border2}`,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,padding:"5px 14px",cursor:"pointer",letterSpacing:1,marginTop:8}}>+ espaço</button>
+            <button onClick={()=>updMont("inventario",[...(char.montaria.inventario||[]),""])}
+              style={{background:"transparent",border:`1px dashed ${C.border2}`,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,padding:"5px 14px",cursor:"pointer",letterSpacing:1,marginTop:8}}>+ espaço</button>
           </div>
-          );
-        })()}
+        )}
 
         {/* ── TAB 6: NOTAS ── */}
         {tab===6&&(
