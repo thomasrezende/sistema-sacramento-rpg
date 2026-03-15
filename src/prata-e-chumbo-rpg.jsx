@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 
 // ─── GOOGLE FONTS ─────────────────────────────────────────────────────────────
 const _fontLink = document.createElement("link");
@@ -1940,7 +1940,7 @@ function NotaCard({ nota, allNotas, onUpdate, onDelete, onConnect, connectMode, 
 }
 
 // Wrap with memo — só re-renderiza se as props mudarem (por id/referência de nota)
-const NotaCardMemo = React.memo(NotaCard, (prev, next) => {
+const NotaCardMemo = memo(NotaCard, (prev, next) => {
   return (
     prev.nota === next.nota &&
     prev.connectMode === next.connectMode &&
