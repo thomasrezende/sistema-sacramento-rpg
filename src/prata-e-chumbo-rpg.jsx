@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 // ─── GOOGLE FONTS ─────────────────────────────────────────────────────────────
 const _fontLink = document.createElement("link");
 _fontLink.rel = "stylesheet";
-_fontLink.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap";
+_fontLink.href = "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Sora:wght@400;600;700&family=Montserrat:wght@400;500;600&family=Inter:wght@400;500;600&display=swap";
 document.head.appendChild(_fontLink);
 
 // ─── GLOBAL STYLE ─────────────────────────────────────────────────────────────
@@ -28,8 +28,9 @@ const C = {
   white: "#f0f0f0", gray: "#aaaaaa", grayDark: "#606060",
   red: "#d63c3c", redDim: "#7a1a1a",
   fontBody: "'Inter', system-ui, sans-serif",
-  fontSerif: "'Crimson Text', Georgia, serif",
-  fontDisplay: "'Playfair Display', Georgia, serif",
+  fontSerif: "'Montserrat', system-ui, sans-serif",
+  fontDisplay: "'Bricolage Grotesque', system-ui, sans-serif",
+  fontSub: "'Sora', system-ui, sans-serif",
 };
 
 // ─── STORAGE ─────────────────────────────────────────────────────────────────
@@ -119,10 +120,10 @@ const Dot = ({filled,danger,onClick,size=18}) => (
 
 const StatBox = ({label,value,onChange,min=0,max=9}) => (
   <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:5}}>
-    <span style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",textTransform:"uppercase",fontWeight:600}}>{label}</span>
+    <span style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase",fontWeight:600}}>{label}</span>
     <div style={{display:"flex",alignItems:"center",gap:6}}>
       <button onClick={()=>onChange(Math.max(min,value-1))} style={btnSm}>−</button>
-      <span style={{width:36,textAlign:"center",fontFamily:"'Playfair Display',Georgia,serif",fontSize:26,color:C.white,lineHeight:1}}>{value}</span>
+      <span style={{width:36,textAlign:"center",fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:26,color:C.white,lineHeight:1}}>{value}</span>
       <button onClick={()=>onChange(Math.min(max,value+1))} style={btnSm}>+</button>
     </div>
   </div>
@@ -131,7 +132,7 @@ const StatBox = ({label,value,onChange,min=0,max=9}) => (
 const SectionTitle = ({children}) => (
   <div style={{display:"flex",alignItems:"center",gap:12,margin:"28px 0 14px"}}>
     <div style={{height:1,flex:1,background:`linear-gradient(to right, transparent, ${C.silverFaint})`}}/>
-    <span style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,letterSpacing:4,color:C.silverDim,textTransform:"uppercase",fontWeight:600}}>{children}</span>
+    <span style={{fontFamily:"'Sora',system-ui,sans-serif",fontSize:10,letterSpacing:4,color:C.silverDim,textTransform:"uppercase",fontWeight:600}}>{children}</span>
     <div style={{height:1,flex:1,background:`linear-gradient(to left, transparent, ${C.silverFaint})`}}/>
   </div>
 );
@@ -150,7 +151,7 @@ function DeleteModal({charName,onConfirm,onCancel}) {
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:24}}>
       <div style={{background:C.bg1,border:`1px solid ${C.border2}`,maxWidth:440,width:"100%",padding:"32px 36px"}}>
-        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:12,letterSpacing:4,color:C.red,textTransform:"uppercase",marginBottom:16}}>Excluir Personagem</div>
+        <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:12,letterSpacing:4,color:C.red,textTransform:"uppercase",marginBottom:16}}>Excluir Personagem</div>
         <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,color:C.gray,lineHeight:1.9,marginBottom:24}}>
           Você está prestes a excluir <span style={{color:C.white}}>"{charName||"Sem nome"}"</span>.<br/>
           <span style={{color:C.red,fontSize:12}}>Atenção: essa operação é permanente e irreversível!</span>
@@ -184,7 +185,7 @@ function HonorMeter({value,onChange}) {
       {/* Título + label */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <span style={{fontSize:11,letterSpacing:3,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",textTransform:"uppercase",fontWeight:600}}>Honra</span>
-        <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:13,color:col,letterSpacing:1}}>{label}</span>
+        <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:13,color:col,letterSpacing:1}}>{label}</span>
       </div>
 
       {/* Valor atual grande + controles */}
@@ -192,7 +193,7 @@ function HonorMeter({value,onChange}) {
         <button onClick={()=>onChange(value-1)}
           style={{width:36,height:36,background:"transparent",border:`1px solid ${C.border2}`,color:C.red,fontFamily:"'Inter',system-ui,sans-serif",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>−</button>
         <div style={{flex:1,textAlign:"center"}}>
-          <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:48,color:col,lineHeight:1}}>{value}</span>
+          <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:48,color:col,lineHeight:1}}>{value}</span>
         </div>
         <button onClick={()=>onChange(value+1)}
           style={{width:36,height:36,background:"transparent",border:`1px solid ${C.border2}`,color:C.silver,fontFamily:"'Inter',system-ui,sans-serif",fontSize:20,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>+</button>
@@ -246,7 +247,7 @@ function SkillCard({h,selected,onToggle}) {
     <div style={{border:`1px solid ${selected?C.silver:C.border}`,background:selected?C.bg3:C.bg2,transition:"all 0.15s",marginBottom:4,width:"100%"}}>
       <div style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px"}}>
         <button onClick={onToggle} style={{width:16,height:16,borderRadius:"50%",border:`1.5px solid ${selected?C.silver:C.silverDim}`,background:selected?C.silver:"transparent",cursor:"pointer",padding:0,flexShrink:0,transition:"all 0.12s"}}/>
-        <span onClick={onToggle} style={{flex:1,fontFamily:"'Playfair Display',Georgia,serif",fontSize:15,color:selected?C.white:C.gray,cursor:"pointer"}}>{h.nome}</span>
+        <span onClick={onToggle} style={{flex:1,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:15,color:selected?C.white:C.gray,cursor:"pointer"}}>{h.nome}</span>
         <button onClick={()=>setOpen(o=>!o)} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:12,padding:"0 4px"}}>{open?"▲":"▼"}</button>
       </div>
       {open&&(
@@ -284,7 +285,7 @@ function CirculosDorWidget({ativos,onChange}) {
           }}>
             <div style={{width:24,height:24,borderRadius:"50%",border:`2px solid ${ativo?cd.cor:C.silverFaint}`,background:ativo?cd.cor:"transparent",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,color:ativo?C.white:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontWeight:"bold",flexShrink:0,transition:"all 0.15s"}}>{cd.num}</div>
             <div style={{flex:1}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:13,color:ativo?C.white:C.gray,marginBottom:2}}>{cd.nome}</div>
+              <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:13,color:ativo?C.white:C.gray,marginBottom:2}}>{cd.nome}</div>
               <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:11,color:ativo?C.silver:C.grayDark,lineHeight:1.4}}>{cd.efeito}</div>
             </div>
             <div style={{width:18,height:18,borderRadius:"50%",border:`1.5px solid ${ativo?cd.cor:C.border2}`,background:ativo?cd.cor:"transparent",flexShrink:0,transition:"all 0.15s"}}/>
@@ -557,7 +558,7 @@ const createBlankChar = () => ({
   recompensa:0,
   inventario:[],
   historicoFinanceiro:[],
-  montaria:{nome:"",tipo:"Cavalo",potencia:0,resistencia:0,fidelidade:0,habilidades:[],inventario:[]},
+  montaria:{nome:"",tipo:"Cavalo",potencia:0,resistencia:0,fidelidade:0,habilidades:[],inventario:[],imagem:null,vidaBase:6,vidaAtual:6,circulosDorAtivos:[],defesa:5,acoes:1,movimentos:1},
   notas:"", pontosSina:0, honra:0,
   cartasSina:[], // [{id, rank, suit, usada}]
   balasPorArma:{}, // {nomeArma: quantidade}
@@ -776,7 +777,7 @@ function DueloModal({ chars, onClose }) {
         {/* Header */}
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24,borderBottom:`1px solid ${C.border}`,paddingBottom:14}}>
           <div>
-            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,letterSpacing:6,color:C.silver,textTransform:"uppercase"}}>Duelo</div>
+            <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,letterSpacing:6,color:C.silver,textTransform:"uppercase"}}>Duelo</div>
             <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,marginTop:2}}>Five-Card-Draw · Pôquer Fechado</div>
           </div>
           <button onClick={onClose} style={{background:"transparent",border:`1px solid ${C.border}`,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,padding:"5px 12px",cursor:"pointer",letterSpacing:1}}>✕ Fechar</button>
@@ -793,7 +794,7 @@ function DueloModal({ chars, onClose }) {
                 <div key={i} style={{flex:1,minWidth:180}}>
                   <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,marginBottom:4,textTransform:"uppercase"}}>Duelista {i+1}</div>
                   <input value={duelistaNomes[i]} onChange={e=>{const n=[...duelistaNomes];n[i]=e.target.value;setDuelistaNomes(n);}}
-                    style={{background:"transparent",border:"none",borderBottom:`1px solid ${C.border}`,color:C.white,fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,width:"100%",outline:"none",padding:"2px 0"}}/>
+                    style={{background:"transparent",border:"none",borderBottom:`1px solid ${C.border}`,color:C.white,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,width:"100%",outline:"none",padding:"2px 0"}}/>
                 </div>
               ))}
             </div>
@@ -804,14 +805,14 @@ function DueloModal({ chars, onClose }) {
                   <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,marginBottom:6,textTransform:"uppercase"}}>{duelistaNomes[i]} — aposta (Vida)</div>
                   <div style={{display:"flex",gap:6,alignItems:"center"}}>
                     <button onClick={()=>{const a=[...apostas];a[i]=Math.max(1,a[i]-1);setApostas(a);}} style={{...btnSm,width:24,height:24,fontSize:13}}>−</button>
-                    <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:22,color:C.white,width:32,textAlign:"center"}}>{apostas[i]}</span>
+                    <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:22,color:C.white,width:32,textAlign:"center"}}>{apostas[i]}</span>
                     <button onClick={()=>{const a=[...apostas];a[i]++;setApostas(a);}} style={{...btnSm,width:24,height:24,fontSize:13}}>+</button>
                     <span style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>Vida</span>
                   </div>
                 </div>
               ))}
             </div>
-            <button onClick={iniciarDuelo} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 28px",cursor:"pointer"}}>
+            <button onClick={iniciarDuelo} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 28px",cursor:"pointer"}}>
               Iniciar Duelo →
             </button>
           </div>
@@ -830,7 +831,7 @@ function DueloModal({ chars, onClose }) {
             {/* Mãos */}
             {[0,1].map(di=>(
               <div key={di} style={{marginBottom:20,padding:"14px 16px",border:`1px solid ${C.border}`,background:C.bg2}}>
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,color:C.white,marginBottom:10}}>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:C.white,marginBottom:10}}>
                   {duelistaNomes[di]} <span style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>— {apostas[di]} Vida apostada</span>
                 </div>
                 <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:8}}>
@@ -854,7 +855,7 @@ function DueloModal({ chars, onClose }) {
             ))}
 
             {!revelado&&(
-              <button onClick={revelar} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 28px",cursor:"pointer"}}>
+              <button onClick={revelar} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 28px",cursor:"pointer"}}>
                 Revelar Cartas →
               </button>
             )}
@@ -868,7 +869,7 @@ function DueloModal({ chars, onClose }) {
                     const ganhou = resultado.vencedor===di;
                     return (
                       <div key={di} style={{flex:"1 1 300px",padding:"14px 16px",border:`1px solid ${ganhou?"#8b7030":C.border}`,background:ganhou?"#1a1200":C.bg2}}>
-                        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,color:ganhou?"#c09040":C.white,marginBottom:6}}>
+                        <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:ganhou?"#c09040":C.white,marginBottom:6}}>
                           {duelistaNomes[di]} {ganhou&&"🏆"}
                         </div>
                         <div style={{fontSize:11,color:ganhou?"#c09040":C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:10,letterSpacing:1}}>{HAND_NAMES[eh.hand]}</div>
@@ -883,10 +884,10 @@ function DueloModal({ chars, onClose }) {
                 {/* Resultado */}
                 <div style={{padding:"14px 18px",border:`1px solid ${C.silver}`,background:C.bg3,marginBottom:16}}>
                   {resultado.vencedor===-1?(
-                    <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:C.silver}}>Empate — decide-se entre os duelistas</div>
+                    <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.silver}}>Empate — decide-se entre os duelistas</div>
                   ):(
                     <>
-                      <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:"#c09040",marginBottom:6}}>
+                      <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:"#c09040",marginBottom:6}}>
                         {duelistaNomes[resultado.vencedor]} venceu o Duelo!
                       </div>
                       <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:12,color:C.gray,lineHeight:1.9}}>
@@ -907,7 +908,7 @@ function DueloModal({ chars, onClose }) {
                       const perdedorTemPresenca = resultado.presD2.includes(suit);
                       return pr?(
                         <div key={suit} style={{padding:"10px 14px",border:`1px solid #3a2a00`,background:"#0d0900",marginBottom:8}}>
-                          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:13,color:"#c09040",marginBottom:4}}>
+                          <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:13,color:"#c09040",marginBottom:4}}>
                             {suit} {pr.nome} — {pr.desc}
                           </div>
                           {resultado.vencedor!==-1&&(
@@ -1036,7 +1037,7 @@ function InventarioTab({char,upd}) {
                   padding:"10px 16px",cursor:"pointer",userSelect:"none"}}>
           <div style={{display:"flex",alignItems:"center",gap:16}}>
             <span style={{fontSize:11,letterSpacing:2,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",textTransform:"uppercase"}}>Dinheiro</span>
-            <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:22,color:C.silver}}>
+            <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:22,color:C.silver}}>
               R${saldo.toLocaleString("pt-BR")}
             </span>
             <span style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1}}>
@@ -1086,12 +1087,18 @@ function InventarioTab({char,upd}) {
             </div>
             {/* Histórico */}
             {historico.length>0&&(
-              <div style={{maxHeight:130,overflowY:"auto"}}>
-                <div style={{fontSize:11,letterSpacing:2,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:6}}>HISTÓRICO RECENTE</div>
-                {historico.slice(0,12).map(h=>(
-                  <div key={h.id} style={{display:"flex",gap:10,fontSize:11,fontFamily:"'Inter',system-ui,sans-serif",padding:"2px 0",borderBottom:`1px solid ${C.bg3}`,color:h.tipo==="receita"?C.silver:C.red}}>
-                    <span style={{flexShrink:0}}>{h.tipo==="receita"?"+":"−"}R${h.val}</span>
+              <div style={{maxHeight:160,overflowY:"auto"}}>
+                <div style={{fontSize:11,letterSpacing:2,color:C.grayDark,fontFamily:"'Sora',system-ui,sans-serif",marginBottom:6}}>HISTÓRICO RECENTE</div>
+                {historico.slice(0,20).map(h=>(
+                  <div key={h.id} style={{display:"flex",gap:10,fontSize:11,fontFamily:"'Inter',system-ui,sans-serif",padding:"3px 0",borderBottom:`1px solid ${C.bg3}`,color:h.tipo==="receita"?C.silver:C.red,alignItems:"center"}}>
+                    <span style={{flexShrink:0,minWidth:56}}>{h.tipo==="receita"?"+":"−"}R${h.val}</span>
                     <span style={{color:C.grayDark,flex:1}}>{h.desc}</span>
+                    <button
+                      onClick={()=>upd("historicoFinanceiro", historico.filter(x=>x.id!==h.id))}
+                      title="Excluir este lançamento"
+                      style={{background:"transparent",border:"none",color:C.border2,cursor:"pointer",fontSize:13,padding:"0 2px",flexShrink:0,lineHeight:1}}
+                      onMouseEnter={e=>e.currentTarget.style.color=C.red}
+                      onMouseLeave={e=>e.currentTarget.style.color=C.border2}>✕</button>
                   </div>
                 ))}
               </div>
@@ -1139,7 +1146,7 @@ function InventarioTab({char,upd}) {
       <div style={{display:"flex",gap:8,marginTop:14,marginBottom:4,flexWrap:"wrap",alignItems:"center"}}>
         <button onClick={()=>{setModalOpen(true);setTimeout(()=>buscaRef.current?.focus(),100);}}
           style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,
-                  fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:3,
+                  fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,
                   textTransform:"uppercase",padding:"8px 20px",cursor:"pointer",transition:"all 0.15s"}}
           onMouseEnter={e=>e.currentTarget.style.background=C.bg3}
           onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
@@ -1182,7 +1189,7 @@ function InventarioTab({char,upd}) {
             <div key={comp.id} style={{marginTop:18}}>
               {/* Cabeçalho do compartimento */}
               <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8,paddingBottom:6,borderBottom:`1px solid ${C.border}`}}>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:4,color:C.silver,textTransform:"uppercase"}}>
+                <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:4,color:C.silver,textTransform:"uppercase"}}>
                   {comp.icon} {comp.label}
                 </span>
                 {comp.limite>0&&(
@@ -1222,7 +1229,7 @@ function InventarioTab({char,upd}) {
                           </div>
 
                           {/* Nome */}
-                          <div style={{flex:1,minWidth:100,fontFamily:"'Playfair Display',Georgia,serif",fontSize:12,color:C.white,cursor:"pointer"}} onClick={()=>setEditId(isEditing?null:it.id)}>
+                          <div style={{flex:1,minWidth:100,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:12,color:C.white,cursor:"pointer"}} onClick={()=>setEditId(isEditing?null:it.id)}>
                             {it.nome||<span style={{color:C.grayDark,fontStyle:"italic"}}>sem nome</span>}
                           </div>
 
@@ -1358,7 +1365,7 @@ function InventarioTab({char,upd}) {
             <div style={{padding:"16px 20px",borderBottom:`1px solid ${C.border}`,flexShrink:0}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
                 <div>
-                  <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:13,letterSpacing:4,color:C.silver,textTransform:"uppercase"}}>
+                  <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:13,letterSpacing:4,color:C.silver,textTransform:"uppercase"}}>
                     Catálogo de Equipamento
                   </div>
                   <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:2,letterSpacing:1}}>
@@ -1443,7 +1450,7 @@ function InventarioTab({char,upd}) {
                       onMouseEnter={e=>{e.currentTarget.style.background=C.bg3;e.currentTarget.style.borderColor=C.silverFaint;}}
                       onMouseLeave={e=>{e.currentTarget.style.background=i%2===0?C.bg2:"transparent";e.currentTarget.style.borderColor=C.bg3;}}>
                       <div>
-                        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,color:C.white}}>{it.nome}</div>
+                        <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:C.white}}>{it.nome}</div>
                         {it._cat&&busca.trim()&&<div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:1}}>{it._cat}</div>}
                       </div>
                       <span style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:11,color:C.silverDim,alignSelf:"center"}}>{it.preco}</span>
@@ -1505,7 +1512,7 @@ function LockModal({ antecedente, onConfirm, onCancel }) {
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:24}}>
       <div style={{background:C.bg2,border:`1px solid ${C.border2}`,maxWidth:480,width:"100%",padding:"28px 28px"}}>
-        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:C.white,marginBottom:8}}>
+        <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.white,marginBottom:8}}>
           🔒 Trancar Antecedente: {antecedente}
         </div>
         <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:12,color:C.gray,lineHeight:1.9,marginBottom:16}}>
@@ -1549,7 +1556,7 @@ function UnlockModal({ antecedente, onConfirm, onCancel }) {
   return (
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.92)",zIndex:3000,display:"flex",alignItems:"center",justifyContent:"center",padding:24}}>
       <div style={{background:C.bg2,border:`1px solid ${C.border2}`,maxWidth:400,width:"100%",padding:"28px 28px"}}>
-        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:C.white,marginBottom:8}}>
+        <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.white,marginBottom:8}}>
           🗝 Desbloquear: {antecedente}
         </div>
         <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:11,color:C.grayDark,letterSpacing:2,marginBottom:8,textTransform:"uppercase"}}>
@@ -1626,7 +1633,7 @@ function AntecedenteGrid({ char, upd, updAnte }) {
 
               {/* Header: nome + cadeado */}
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:3}}>
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:13,color:isLocked?"#8b6914":C.white}}>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:13,color:isLocked?"#8b6914":C.white}}>
                   {isLocked ? "🐄 " : ""}{a}
                 </div>
                 <button
@@ -1725,7 +1732,7 @@ function NotaCard({ nota, allNotas, onUpdate, onDelete, onConnect, connectMode, 
           onChange={e => upd({ titulo: e.target.value })}
           placeholder="Título da nota..."
           style={{flex:1,background:"transparent",border:"none",color:nota.fechada?"#555":C.white,
-            fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,outline:"none",
+            fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,outline:"none",
             textDecoration:nota.fechada?"line-through":"none"}}
         />
         {/* Conexões badge */}
@@ -1781,7 +1788,7 @@ function NotaCard({ nota, allNotas, onUpdate, onDelete, onConnect, connectMode, 
             disabled={nota.fechada}
             rows={3}
             style={{width:"100%",background:"transparent",border:"none",
-              color:nota.fechada?"#555":C.gray,fontFamily:"'Crimson Text',Georgia,serif",
+              color:nota.fechada?"#555":C.gray,fontFamily:"'Montserrat',system-ui,sans-serif",
               fontSize:14,lineHeight:1.8,outline:"none",resize:"vertical",
               boxSizing:"border-box",padding:0,
               fontStyle:nota.fechada?"italic":"normal"}}
@@ -1941,7 +1948,7 @@ function NotasTab({ char, upd }) {
               ⬡ Clique em outra nota para conectar — ou clique em ⬡ novamente para cancelar
             </div>
           )}
-          <button onClick={addNota} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",padding:"6px 16px",cursor:"pointer"}}>
+          <button onClick={addNota} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:9,letterSpacing:3,textTransform:"uppercase",padding:"6px 16px",cursor:"pointer"}}>
             + Nova Nota
           </button>
         </div>
@@ -1975,7 +1982,7 @@ function NotasTab({ char, upd }) {
               const cs = getNoteStyle(n.color);
               return (
                 <div key={n.id} style={{display:"flex",flexDirection:"column",gap:4,padding:"8px 10px",border:`1px solid ${cs.border}`,background:cs.bg}}>
-                  <div style={{fontSize:10,color:C.white,fontFamily:"'Playfair Display',Georgia,serif"}}>{n.titulo||"Sem título"}</div>
+                  <div style={{fontSize:10,color:C.white,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif"}}>{n.titulo||"Sem título"}</div>
                   <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
                     {(n.connections||[]).map(cid=>{
                       const tgt = notas.find(x=>x.id===cid);
@@ -2125,7 +2132,7 @@ function MiniCombatTracker({ char }) {
       <div style={{ borderBottom: `1px solid ${C.border}`, padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div>
-            <span style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 11, letterSpacing: 3, color: C.silver, textTransform: "uppercase" }}>Tracker</span>
+            <span style={{ fontFamily: "'Bricolage Grotesque',system-ui,sans-serif", fontSize: 11, letterSpacing: 3, color: C.silver, textTransform: "uppercase" }}>Tracker</span>
             <span style={{ fontFamily: "'Inter',system-ui,sans-serif", fontSize: 9, color: C.grayDark, letterSpacing: 2, marginLeft: 8 }}>Rodada {rodada}</span>
           </div>
           {activeC && (
@@ -2180,7 +2187,7 @@ function MiniCombatTracker({ char }) {
                 )}
                 {/* Nome */}
                 <div style={{ flex: 1, minWidth: 80 }}>
-                  <div style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 12, color: c.incapaz ? C.grayDark : C.white, textDecoration: c.incapaz ? "line-through" : "none" }}>
+                  <div style={{ fontFamily: "'Bricolage Grotesque',system-ui,sans-serif", fontSize: 12, color: c.incapaz ? C.grayDark : C.white, textDecoration: c.incapaz ? "line-through" : "none" }}>
                     {c.nome}
                     {c.type === "npc" && <span style={{ fontSize: 8, color: C.grayDark, marginLeft: 5, letterSpacing: 1 }}>NdC{c.ndc}</span>}
                   </div>
@@ -2190,7 +2197,7 @@ function MiniCombatTracker({ char }) {
                 {/* Vida */}
                 <div style={{ display: "flex", alignItems: "center", gap: 3, flexShrink: 0 }}>
                   <button onClick={() => updC(c.id, { vidaAtual: Math.max(0, c.vidaAtual - 1) })} style={{ ...btnSm, width: 16, height: 16, fontSize: 10 }}>−</button>
-                  <span style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 13, color: c.vidaAtual <= 1 ? C.red : C.white, width: 28, textAlign: "center" }}>{c.vidaAtual}/{c.vidaBase}</span>
+                  <span style={{ fontFamily: "'Bricolage Grotesque',system-ui,sans-serif", fontSize: 13, color: c.vidaAtual <= 1 ? C.red : C.white, width: 28, textAlign: "center" }}>{c.vidaAtual}/{c.vidaBase}</span>
                   <button onClick={() => updC(c.id, { vidaAtual: Math.min(c.vidaBase, c.vidaAtual + 1) })} style={{ ...btnSm, width: 16, height: 16, fontSize: 10 }}>+</button>
                 </div>
                 {/* Dor dots */}
@@ -2236,7 +2243,7 @@ function MiniCombatTracker({ char }) {
             style={{ flex: 1, background: "transparent", border: "none", borderBottom: `1px solid ${C.border}`, color: C.white, fontFamily: "'Inter',system-ui,sans-serif", fontSize: 11, outline: "none", padding: "2px 0" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
             <button onClick={() => setNpcNdc(n => Math.max(1, n - 1))} style={{ ...btnSm, width: 16, height: 16, fontSize: 10 }}>−</button>
-            <span style={{ fontSize: 11, color: C.silver, fontFamily: "'Playfair Display',Georgia,serif", width: 16, textAlign: "center" }}>{npcNdc}</span>
+            <span style={{ fontSize: 11, color: C.silver, fontFamily: "'Bricolage Grotesque',system-ui,sans-serif", width: 16, textAlign: "center" }}>{npcNdc}</span>
             <button onClick={() => setNpcNdc(n => Math.min(6, n + 1))} style={{ ...btnSm, width: 16, height: 16, fontSize: 10 }}>+</button>
           </div>
           <button onClick={addNpc} style={{ background: "transparent", border: `1px solid ${C.border2}`, color: C.silverDim, fontFamily: "'Inter',system-ui,sans-serif", fontSize: 9, padding: "3px 8px", cursor: "pointer", letterSpacing: 1 }}>+ NPC</button>
@@ -2393,9 +2400,9 @@ function DiceRoller({ char }) {
         borderBottom:open?`1px solid ${C.border}`:"none",
       }}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:13,letterSpacing:3,color:C.silver,textTransform:"uppercase"}}>🎲 Dados</span>
+          <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:13,letterSpacing:3,color:C.silver,textTransform:"uppercase"}}>🎲 Dados</span>
           {result&&!open&&(
-            <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:result.critico?"#c09040":result.falhaCritica?C.red:result.sucesso?C.silver:C.grayDark,marginLeft:8}}>
+            <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:result.critico?"#c09040":result.falhaCritica?C.red:result.sucesso?C.silver:C.grayDark,marginLeft:8}}>
               {result.total} {result.critico?"⚡ CRÍTICO!":result.falhaCritica?"💀 FALHA CRÍTICA!":result.sucesso?"✓":"✗"}
             </span>
           )}
@@ -2466,7 +2473,7 @@ function DiceRoller({ char }) {
             <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:12}}>
               <span style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,textTransform:"uppercase"}}>Bônus / Penalidade:</span>
               <button onClick={()=>setBonus(b=>b-1)} style={{...btnSm,width:22,height:22,fontSize:12}}>−</button>
-              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:bonus>0?"#50c050":bonus<0?C.red:C.white,width:28,textAlign:"center"}}>{bonus>0?"+":""}{bonus}</span>
+              <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:bonus>0?"#50c050":bonus<0?C.red:C.white,width:28,textAlign:"center"}}>{bonus>0?"+":""}{bonus}</span>
               <button onClick={()=>setBonus(b=>b+1)} style={{...btnSm,width:22,height:22,fontSize:12}}>+</button>
               {bonus!==0&&<button onClick={()=>setBonus(0)} style={{...btnSm,fontSize:8,width:"auto",padding:"2px 6px",color:C.grayDark}}>reset</button>}
             </div>
@@ -2475,14 +2482,14 @@ function DiceRoller({ char }) {
           {/* Botão */}
           <button onClick={roll} style={{
             background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,
-            fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:4,
+            fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:4,
             textTransform:"uppercase",padding:"8px 24px",cursor:"pointer",display:"block",marginBottom:14,
           }}>🎲 Rolar</button>
 
           {/* Resultado de crítico/falha isolado (modos critico/falha) */}
           {critFinal&&(modo==="critico"||modo==="falha")&&(
             <div style={{border:`1px solid ${result?.critico?"#8b7030":C.redDim}`,background:result?.critico?"#1a1200":"#200000",padding:"10px 14px",marginBottom:10}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:3,color:result?.critico?"#c09040":C.red,marginBottom:4}}>{critFinal.tipo} — {critFinal.d}</div>
+              <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:3,color:result?.critico?"#c09040":C.red,marginBottom:4}}>{critFinal.tipo} — {critFinal.d}</div>
               <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:13,color:C.white}}>{critFinal.resultado}</div>
             </div>
           )}
@@ -2500,13 +2507,13 @@ function DiceRoller({ char }) {
               <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:8,flexWrap:"wrap"}}>
                 {/* d1 */}
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-                  <div style={{width:40,height:40,border:`2px solid ${diceColor(result.d1)}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Playfair Display',Georgia,serif",fontSize:22,color:diceColor(result.d1)}}>{result.d1}</div>
+                  <div style={{width:40,height:40,border:`2px solid ${diceColor(result.d1)}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:22,color:diceColor(result.d1)}}>{result.d1}</div>
                   <span style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>{result.usar2d6?"d1":"dado"}</span>
                 </div>
                 {/* d2 (2d6) */}
                 {result.d2!=null&&(
                   <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-                    <div style={{width:40,height:40,border:`2px solid ${result.d2===result.base?diceColor(result.d2):"#2a2a2a"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Playfair Display',Georgia,serif",fontSize:22,color:result.d2===result.base?diceColor(result.d2):C.grayDark,opacity:result.d2<result.d1?0.4:1}}>{result.d2}</div>
+                    <div style={{width:40,height:40,border:`2px solid ${result.d2===result.base?diceColor(result.d2):"#2a2a2a"}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:22,color:result.d2===result.base?diceColor(result.d2):C.grayDark,opacity:result.d2<result.d1?0.4:1}}>{result.d2}</div>
                     <span style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>d2</span>
                   </div>
                 )}
@@ -2515,7 +2522,7 @@ function DiceRoller({ char }) {
                   <>
                     <span style={{color:C.grayDark,fontSize:14,margin:"0 2px"}}>→</span>
                     <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-                      <div style={{width:40,height:40,border:`2px solid ${diceColor(result.dExtra)}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Playfair Display',Georgia,serif",fontSize:22,color:diceColor(result.dExtra)}}>{result.dExtra}</div>
+                      <div style={{width:40,height:40,border:`2px solid ${diceColor(result.dExtra)}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:22,color:diceColor(result.dExtra)}}>{result.dExtra}</div>
                       <span style={{fontSize:8,color:result.critico?"#c09040":result.falhaCritica?C.red:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>{result.critico?"crítico!":result.falhaCritica?"falha!":"relance"}</span>
                     </div>
                   </>
@@ -2525,7 +2532,7 @@ function DiceRoller({ char }) {
                   <>
                     <span style={{color:C.grayDark,fontSize:18,margin:"0 4px"}}>=</span>
                     <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-                      <div style={{width:52,height:52,border:`2px solid ${result.sucesso?"#50c050":C.red}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Playfair Display',Georgia,serif",fontSize:28,color:result.sucesso?"#50c050":C.red,background:result.sucesso?"#0a140a":"#1a0000"}}>{result.total}</div>
+                      <div style={{width:52,height:52,border:`2px solid ${result.sucesso?"#50c050":C.red}`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:28,color:result.sucesso?"#50c050":C.red,background:result.sucesso?"#0a140a":"#1a0000"}}>{result.total}</div>
                       <span style={{fontSize:9,color:result.sucesso?"#50c050":C.red,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1}}>{result.sucesso?"SUCESSO":"FALHA"}{modo==="antecedente"||modo==="tudo_nada"?" (NA 6)":""}</span>
                     </div>
                   </>
@@ -2534,13 +2541,13 @@ function DiceRoller({ char }) {
 
               {/* Resultado especial */}
               {result.resultado&&(
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:result.sucesso?C.silver:C.grayDark,marginBottom:6}}>{result.resultado}</div>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:result.sucesso?C.silver:C.grayDark,marginBottom:6}}>{result.resultado}</div>
               )}
               {result.critico&&(
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:12,color:"#c09040",letterSpacing:2,marginBottom:4}}>⚡ ACERTO CRÍTICO!</div>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:12,color:"#c09040",letterSpacing:2,marginBottom:4}}>⚡ ACERTO CRÍTICO!</div>
               )}
               {result.falhaCritica&&(
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:12,color:C.red,letterSpacing:2,marginBottom:4}}>💀 FALHA CRÍTICA!</div>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:12,color:C.red,letterSpacing:2,marginBottom:4}}>💀 FALHA CRÍTICA!</div>
               )}
 
               {/* Resultado da tabela após crítico/falha automático */}
@@ -2680,13 +2687,13 @@ function XPChecklist({ char, upd }) {
         </div>
       )}
       <div style={{display:"flex",alignItems:"center",gap:14,marginTop:12}}>
-        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:20,color:total>0?C.silver:C.grayDark}}>
+        <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:20,color:total>0?C.silver:C.grayDark}}>
           +{total} XP
         </div>
         <button onClick={aplicarXP} disabled={total===0||aplicado} style={{
           background:"transparent",border:`1px solid ${total>0&&!aplicado?C.silver:C.border}`,
           color:total>0&&!aplicado?C.silver:C.grayDark,
-          fontFamily:"'Playfair Display',Georgia,serif",fontSize:9,letterSpacing:3,
+          fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:9,letterSpacing:3,
           textTransform:"uppercase",padding:"6px 16px",cursor:total>0&&!aplicado?"pointer":"not-allowed",
         }}>{aplicado?"✓ Aplicado!":"Aplicar XP"}</button>
         <span style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>
@@ -2710,10 +2717,6 @@ function CharSheet({char,update}) {
   };
   const updAnte=(k,v)=>{
     if(v<0||v>6)return;
-    const total=Object.values(char.antecedentes).reduce((a,b)=>a+b,0);
-    const delta=v-char.antecedentes[k];
-    const max=4+(char.atributos.Intelecto||0);
-    if(delta>0&&total+delta>max)return;
     upd("antecedentes",{...char.antecedentes,[k]:v});
   };
   const toggleHab=(nome)=>upd("habilidades",char.habilidades.includes(nome)?char.habilidades.filter(x=>x!==nome):[...char.habilidades,nome]);
@@ -2725,7 +2728,7 @@ function CharSheet({char,update}) {
   };
 
   const antTotal=Object.values(char.antecedentes).reduce((a,b)=>a+b,0);
-  const antMax=4+(char.atributos.Intelecto||0);
+  const antMax=4+(char.atributos.Intelecto||0); // referência inicial — sem travamento após nível 1
   const condAtivas=(char.circulosDorAtivos||[]).length>0;
 
   return (
@@ -2738,11 +2741,11 @@ function CharSheet({char,update}) {
           <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={handleImg}/>
         </div>
         <div style={{flex:1}}>
-          <Inp value={char.nome} onChange={v=>upd("nome",v)} placeholder="Nome do personagem" style={{fontSize:22,fontFamily:"'Playfair Display',Georgia,serif",letterSpacing:2,color:C.white}}/>
+          <Inp value={char.nome} onChange={v=>upd("nome",v)} placeholder="Nome do personagem" style={{fontSize:22,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",letterSpacing:2,color:C.white}}/>
           <div style={{marginTop:6}}><Inp value={char.conceito} onChange={v=>upd("conceito",v)} placeholder="Conceito"/></div>
           <div style={{marginTop:6}}><Inp value={char.jogador} onChange={v=>upd("jogador",v)} placeholder="Jogador"/></div>
           <div style={{display:"flex",gap:16,marginTop:12,flexWrap:"wrap"}}>
-            <StatBox label="Nível" value={char.nivel} onChange={v=>upd("nivel",v)} min={1} max={6}/>
+            <StatBox label="Nível" value={char.nivel} onChange={v=>upd("nivel",v)} min={1} max={20}/>
             <StatBox label="XP" value={char.xp} onChange={v=>upd("xp",v)} min={0} max={99}/>
             <StatBox label="$$$" value={char.dinheiro} onChange={v=>upd("dinheiro",v)} min={0} max={99999}/>
             <StatBox label="Pts. de Sina" value={char.pontosSina} onChange={v=>upd("pontosSina",v)} min={0} max={20}/>
@@ -2805,7 +2808,7 @@ function CharSheet({char,update}) {
       {/* ── TABS ── */}
       <div style={{display:"flex",borderBottom:`1px solid ${C.border}`,marginTop:18,flexWrap:"wrap"}}>
         {TABS.map((t,i)=>(
-          <button key={t} onClick={()=>setTab(i)} style={{background:"transparent",border:"none",borderBottom:tab===i?`2px solid ${C.silver}`:"2px solid transparent",color:tab===i?C.white:C.grayDark,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"8px 12px",cursor:"pointer",transition:"all 0.15s"}}>{t}</button>
+          <button key={t} onClick={()=>setTab(i)} style={{background:"transparent",border:"none",borderBottom:tab===i?`2px solid ${C.silver}`:"2px solid transparent",color:tab===i?C.white:C.grayDark,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"8px 12px",cursor:"pointer",transition:"all 0.15s"}}>{t}</button>
         ))}
       </div>
 
@@ -2859,7 +2862,7 @@ function CharSheet({char,update}) {
             <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
               {ATRIBUTOS.map(a=>(
                 <div key={a} style={{minWidth:148,padding:"14px 16px",border:`1px solid ${C.border}`,background:C.bg2}}>
-                  <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,color:C.white,marginBottom:4}}>{a}</div>
+                  <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:C.white,marginBottom:4}}>{a}</div>
                   <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:12,lineHeight:1.4}}>{ATRIBUTOS_DESC[a]}</div>
                   <StatBox label={a} value={char.atributos[a]} onChange={v=>updAtrib(a,v)} max={4}/>
                 </div>
@@ -2934,7 +2937,7 @@ function CharSheet({char,update}) {
             <SectionTitle>Trilha de Redenção</SectionTitle>
             <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:20}}>
               {TRILHAS.map(t=>(
-                <button key={t} onClick={()=>upd("trilha",{...char.trilha,tipo:t})} style={{background:char.trilha.tipo===t?C.bg3:"transparent",border:`1px solid ${char.trilha.tipo===t?C.silver:C.border}`,color:char.trilha.tipo===t?C.white:C.grayDark,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"6px 14px",cursor:"pointer"}}>{t}</button>
+                <button key={t} onClick={()=>upd("trilha",{...char.trilha,tipo:t})} style={{background:char.trilha.tipo===t?C.bg3:"transparent",border:`1px solid ${char.trilha.tipo===t?C.silver:C.border}`,color:char.trilha.tipo===t?C.white:C.grayDark,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"6px 14px",cursor:"pointer"}}>{t}</button>
               ))}
             </div>
             {char.trilha.tipo&&(
@@ -2965,64 +2968,126 @@ function CharSheet({char,update}) {
         )}
 
         {/* ── TAB 5: COMPANHEIRO ── */}
-        {tab===5&&(
+        {tab===5&&(()=>{
+          const mont = char.montaria;
+          const montImgRef = React.createRef();
+          const montVidaBase = mont.vidaBase ?? 6;
+          const montVidaAtual = mont.vidaAtual ?? montVidaBase;
+          const montDorAtivos = mont.circulosDorAtivos || [];
+          return (
           <div>
-            <SectionTitle>Montaria / Companheiro</SectionTitle>
-            <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:16,alignItems:"flex-end"}}>
+            {/* ── Identidade + Foto ── */}
+            <SectionTitle>Identidade do Companheiro</SectionTitle>
+            <div style={{display:"flex",gap:16,marginBottom:20,flexWrap:"wrap",alignItems:"flex-start"}}>
+              {/* Foto */}
+              <div
+                onClick={()=>{const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>updMont("imagem",ev.target.result);r.readAsDataURL(f);};inp.click();}}
+                style={{width:96,height:116,flexShrink:0,border:`1px dashed ${C.border2}`,cursor:"pointer",background:mont.imagem?`url(${mont.imagem}) center/cover`:C.bg2,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",position:"relative"}}>
+                {!mont.imagem&&<span style={{fontSize:9,color:C.grayDark,letterSpacing:2,textAlign:"center",padding:8,textTransform:"uppercase",fontFamily:"'Sora',system-ui,sans-serif"}}>Foto</span>}
+                {mont.imagem&&<div style={{position:"absolute",bottom:0,right:0,padding:"2px 4px",background:"rgba(0,0,0,0.7)",fontSize:8,color:C.grayDark,cursor:"pointer",fontFamily:"'Inter',system-ui,sans-serif"}} onClick={e=>{e.stopPropagation();updMont("imagem",null);}}>✕</div>}
+              </div>
+              {/* Nome + tipo */}
               <div style={{flex:1,minWidth:180}}>
-                <span style={{fontSize:11,letterSpacing:2,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",textTransform:"uppercase"}}>Nome</span>
-                <Inp value={char.montaria.nome} onChange={v=>updMont("nome",v)} placeholder="Nome do companheiro..."/>
-              </div>
-              <div style={{minWidth:140}}>
-                <span style={{fontSize:11,letterSpacing:2,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",textTransform:"uppercase"}}>Tipo</span>
-                <select value={char.montaria.tipo||"Cavalo"} onChange={e=>updMont("tipo",e.target.value)} style={{display:"block",background:C.bg2,border:`1px solid ${C.border}`,color:C.white,fontFamily:"'Inter',system-ui,sans-serif",fontSize:13,padding:"5px 10px",marginTop:4,width:"100%",outline:"none",cursor:"pointer"}}>
-                  {["Cavalo","Burro","Mula","Cachorro","Lobo","Cão de Guerra","Outro"].map(t=><option key={t} value={t}>{t}</option>)}
-                </select>
-              </div>
-            </div>
-            <div style={{display:"flex",gap:20,flexWrap:"wrap",marginBottom:20}}>
-              <StatBox label="Potência" value={char.montaria.potencia} onChange={v=>updMont("potencia",v)} max={5}/>
-              <StatBox label="Resistência" value={char.montaria.resistencia} onChange={v=>updMont("resistencia",v)} max={5}/>
-            </div>
-            <div style={{marginBottom:24}}>
-              <span style={{fontSize:11,letterSpacing:2,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",textTransform:"uppercase"}}>Fidelidade</span>
-              <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>
-                {[0,1,2,3,4,5].map(n=>(
-                  <button key={n} onClick={()=>updMont("fidelidade",n)} style={{width:40,height:40,border:`1px solid ${char.montaria.fidelidade>=n?C.silver:C.border}`,background:char.montaria.fidelidade>=n?C.bg3:"transparent",color:char.montaria.fidelidade>=n?C.white:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,cursor:"pointer"}}>{n}</button>
-                ))}
-              </div>
-              <div style={{marginTop:12,fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:2.2}}>
-                {[[0,"Estranha: sem bônus."],[1,"+1 Atributo (sua escolha)."],[2,"+1 Atributo (sua escolha)."],[3,"Sem penalidade para saltar obstáculos perigosos."],[4,"Atende quando chamada pelo nome."],[5,"Vem até você em raio de 500m quando chamada."]].map(([n,txt])=>(
-                  <div key={n} style={{color:char.montaria.fidelidade>=n?C.silver:C.grayDark}}><span style={{color:C.silverDim,marginRight:8}}>{n}</span>{txt}</div>
-                ))}
+                <div style={{marginBottom:12}}>
+                  <span style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase"}}>Nome</span>
+                  <Inp value={mont.nome} onChange={v=>updMont("nome",v)} placeholder="Nome do companheiro..."/>
+                </div>
+                <div>
+                  <span style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase"}}>Tipo</span>
+                  <select value={mont.tipo||"Cavalo"} onChange={e=>updMont("tipo",e.target.value)} style={{display:"block",background:C.bg2,border:`1px solid ${C.border}`,color:C.white,fontFamily:"'Inter',system-ui,sans-serif",fontSize:13,padding:"5px 10px",marginTop:4,width:"100%",outline:"none",cursor:"pointer"}}>
+                    {["Cavalo","Burro","Mula","Jegue","Cachorro","Lobo","Cão de Guerra","Outro"].map(t=><option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
               </div>
             </div>
 
+            {/* ── Condições de combate ── */}
+            <SectionTitle>Vida & Condições de Combate</SectionTitle>
+            <div style={{display:"flex",gap:24,flexWrap:"wrap",marginBottom:20,alignItems:"flex-start"}}>
+              {/* Vida */}
+              <div>
+                <div style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase",marginBottom:8}}>Círculos de Vida</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:6,alignItems:"center",marginBottom:8}}>
+                  {Array.from({length:montVidaBase}).map((_,i)=>(
+                    <Dot key={i} filled={i<montVidaAtual} danger onClick={()=>updMont("vidaAtual",i<montVidaAtual?i:i+1)}/>
+                  ))}
+                  <button onClick={()=>updMont("vidaBase",montVidaBase+1)} style={{width:16,height:16,borderRadius:"50%",border:`1.5px dashed ${C.border2}`,background:"transparent",color:C.grayDark,cursor:"pointer",fontSize:10,padding:0,lineHeight:1}}>+</button>
+                  {montVidaBase>1&&<button onClick={()=>updMont("vidaBase",montVidaBase-1)} style={{width:16,height:16,borderRadius:"50%",border:`1.5px dashed ${C.border2}`,background:"transparent",color:C.grayDark,cursor:"pointer",fontSize:10,padding:0,lineHeight:1}}>−</button>}
+                </div>
+                <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>{montVidaAtual}/{montVidaBase} · Resistência +1 Vida/pt</div>
+              </div>
+              {/* Dor */}
+              <div>
+                <div style={{fontSize:10,letterSpacing:2,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",textTransform:"uppercase",marginBottom:8}}>Círculos de Dor</div>
+                <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>
+                  {CIRCULOS_DOR.map((cd)=>{
+                    const ativo = montDorAtivos.includes(cd.num);
+                    return (
+                      <div key={cd.num} onClick={()=>updMont("circulosDorAtivos",ativo?montDorAtivos.filter(x=>x!==cd.num):[...montDorAtivos,cd.num])}
+                        style={{width:28,height:28,border:`1.5px solid ${ativo?C.red:C.border}`,background:ativo?"#300000":"transparent",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:ativo?C.red:C.grayDark}}>
+                        {cd.num}
+                      </div>
+                    );
+                  })}
+                </div>
+                {montDorAtivos.length>0&&(
+                  <div style={{fontSize:10,color:C.red,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:1.8}}>
+                    {CIRCULOS_DOR.filter(cd=>montDorAtivos.includes(cd.num)).map(cd=><div key={cd.num}>● {cd.efeito}</div>)}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ── Stats de combate ── */}
+            <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:24}}>
+              <StatBox label="Defesa" value={mont.defesa??5} onChange={v=>updMont("defesa",Math.max(1,v))} min={1} max={10}/>
+              <StatBox label="Ações" value={mont.acoes??1} onChange={v=>updMont("acoes",Math.max(1,v))} min={1} max={8}/>
+              <StatBox label="Movimentos" value={mont.movimentos??1} onChange={v=>updMont("movimentos",Math.max(1,v))} min={1} max={8}/>
+              <StatBox label="Potência" value={mont.potencia??0} onChange={v=>updMont("potencia",Math.max(0,v))} min={0} max={10}/>
+              <StatBox label="Resistência" value={mont.resistencia??0} onChange={v=>updMont("resistencia",Math.max(0,v))} min={0} max={10}/>
+            </div>
+
+            {/* ── Fidelidade ── */}
+            <SectionTitle>Fidelidade</SectionTitle>
+            <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
+              {[0,1,2,3,4,5].map(n=>(
+                <button key={n} onClick={()=>updMont("fidelidade",n)} style={{width:40,height:40,border:`1px solid ${mont.fidelidade>=n?C.silver:C.border}`,background:mont.fidelidade>=n?C.bg3:"transparent",color:mont.fidelidade>=n?C.white:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,cursor:"pointer"}}>{n}</button>
+              ))}
+            </div>
+            <div style={{fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:2.2,marginBottom:20}}>
+              {[[0,"Estranha: sem bônus."],[1,"+1 Atributo (sua escolha)."],[2,"+1 Atributo (sua escolha)."],[3,"Sem penalidade para saltar obstáculos perigosos."],[4,"Atende quando chamada pelo nome."],[5,"Vem até você em raio de 500m quando chamada."]].map(([n,txt])=>(
+                <div key={n} style={{color:mont.fidelidade>=n?C.silver:C.grayDark}}><span style={{color:C.silverDim,marginRight:8}}>{n}</span>{txt}</div>
+              ))}
+            </div>
+
+            {/* ── Habilidades ── */}
             <SectionTitle>Habilidades do Companheiro</SectionTitle>
             <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}}>
-              {(char.montaria.habilidades||[]).map((h,i)=>(
+              {(mont.habilidades||[]).map((h,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"4px 10px",border:`1px solid ${C.silver}`,background:C.bg3}}>
                   <span style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:12,color:C.white}}>{h}</span>
-                  <button onClick={()=>updMont("habilidades",char.montaria.habilidades.filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:11,padding:0}}>✕</button>
+                  <button onClick={()=>updMont("habilidades",mont.habilidades.filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:11,padding:0}}>✕</button>
                 </div>
               ))}
             </div>
-            <AddHabForm onAdd={nome=>updMont("habilidades",[...(char.montaria.habilidades||[]),nome])}/>
+            <AddHabForm onAdd={nome=>updMont("habilidades",[...(mont.habilidades||[]),nome])}/>
 
+            {/* ── Inventário ── */}
             <SectionTitle>Inventário do Companheiro</SectionTitle>
-            <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:10}}>Bolsa de montaria: 10 espaços adicionais.</div>
-            {(char.montaria.inventario||[]).map((item,i)=>(
+            <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginBottom:10}}>Bolsa de montaria: +10 espaços adicionais. 1 Movimento montado = 10m.</div>
+            {(mont.inventario||[]).map((item,i)=>(
               <div key={i} style={{display:"flex",gap:10,alignItems:"center",marginBottom:5}}>
                 <span style={{width:18,textAlign:"right",fontSize:10,color:C.border2,fontFamily:"'Inter',system-ui,sans-serif"}}>{i+1}</span>
                 <div style={{flex:1,borderBottom:`1px solid ${C.border}`}}>
-                  <input value={item} onChange={e=>{const inv=[...(char.montaria.inventario||[])];inv[i]=e.target.value;updMont("inventario",inv);}} placeholder="item..." style={{background:"transparent",border:"none",outline:"none",color:C.white,fontFamily:"'Crimson Text', Georgia, serif",fontSize:14,width:"100%",padding:"2px 0"}}/>
+                  <input value={item} onChange={e=>{const inv=[...(mont.inventario||[])];inv[i]=e.target.value;updMont("inventario",inv);}} placeholder="item..." style={{background:"transparent",border:"none",outline:"none",color:C.white,fontFamily:"'Inter',system-ui,sans-serif",fontSize:14,width:"100%",padding:"2px 0"}}/>
                 </div>
-                <button onClick={()=>updMont("inventario",(char.montaria.inventario||[]).filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:12,padding:0}}>✕</button>
+                <button onClick={()=>updMont("inventario",(mont.inventario||[]).filter((_,j)=>j!==i))} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:12,padding:0}}>✕</button>
               </div>
             ))}
-            <button onClick={()=>updMont("inventario",[...(char.montaria.inventario||[]),""])} style={{background:"transparent",border:`1px dashed ${C.border2}`,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,padding:"5px 14px",cursor:"pointer",letterSpacing:1,marginTop:8}}>+ espaço</button>
+            <button onClick={()=>updMont("inventario",[...(mont.inventario||[]),""])} style={{background:"transparent",border:`1px dashed ${C.border2}`,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,padding:"5px 14px",cursor:"pointer",letterSpacing:1,marginTop:8}}>+ espaço</button>
           </div>
-        )}
+          );
+        })()}
 
         {/* ── TAB 6: NOTAS ── */}
         {tab===6&&(
@@ -3104,7 +3169,7 @@ function DescansoWidget({ char, upd }) {
         </div>
         <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
           <button onClick={() => setUnguentos(u => Math.max(0, u - 1))} style={{ ...btnSm, width: 22, height: 22, fontSize: 12 }}>−</button>
-          <span style={{ fontFamily: "'Playfair Display',Georgia,serif", fontSize: 16, color: unguentos > 0 ? "#c09040" : C.white, width: 24, textAlign: "center" }}>{unguentos}</span>
+          <span style={{ fontFamily: "'Bricolage Grotesque',system-ui,sans-serif", fontSize: 16, color: unguentos > 0 ? "#c09040" : C.white, width: 24, textAlign: "center" }}>{unguentos}</span>
           <button onClick={() => setUnguentos(u => u + 1)} style={{ ...btnSm, width: 22, height: 22, fontSize: 12 }}>+</button>
         </div>
         <div style={{ fontSize: 10, color: C.grayDark, fontFamily: "'Inter',system-ui,sans-serif" }}>
@@ -3127,7 +3192,7 @@ function DescansoWidget({ char, upd }) {
           background: "transparent",
           border: `1px solid ${vida_faltando > 0 || dor_ativas > 0 ? C.silver : C.border}`,
           color: vida_faltando > 0 || dor_ativas > 0 ? C.silver : C.grayDark,
-          fontFamily: "'Playfair Display',Georgia,serif", fontSize: 10,
+          fontFamily: "'Bricolage Grotesque',system-ui,sans-serif", fontSize: 10,
           letterSpacing: 3, textTransform: "uppercase",
           padding: "7px 20px", cursor: vida_faltando > 0 || dor_ativas > 0 ? "pointer" : "not-allowed",
         }}>
@@ -3383,23 +3448,23 @@ function BandoScreen() {
             <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,marginBottom:4,textTransform:"uppercase"}}>Nome do Bando</div>
             <input value={bando.nome} onChange={e=>upd("nome",e.target.value)}
               placeholder="Os Pavio Curto..."
-              style={{background:"transparent",border:"none",borderBottom:`1px solid ${C.border}`,color:C.white,fontFamily:"'Playfair Display',Georgia,serif",fontSize:20,width:"100%",outline:"none",padding:"2px 0"}}/>
+              style={{background:"transparent",border:"none",borderBottom:`1px solid ${C.border}`,color:C.white,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:20,width:"100%",outline:"none",padding:"2px 0"}}/>
           </div>
           <div style={{display:"flex",gap:20,flexWrap:"wrap"}}>
             <div style={{textAlign:"center"}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:32,color:C.silver}}>{bando.nivel}</div>
+              <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:32,color:C.silver}}>{bando.nivel}</div>
               <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,textTransform:"uppercase"}}>Nível</div>
             </div>
             <div style={{textAlign:"center"}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:32,color:"#c09040"}}>{bando.notoriedade}</div>
+              <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:32,color:"#c09040"}}>{bando.notoriedade}</div>
               <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,textTransform:"uppercase"}}>Notoriedade</div>
             </div>
             <div style={{textAlign:"center"}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:32,color:"#50c050"}}>R${bando.dinheiro}</div>
+              <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:32,color:"#50c050"}}>R${bando.dinheiro}</div>
               <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,textTransform:"uppercase"}}>Caixa do Bando</div>
             </div>
             <div style={{textAlign:"center"}}>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:32,color:C.silverDim}}>{(bando.acomodacoes||[]).length}</div>
+              <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:32,color:C.silverDim}}>{(bando.acomodacoes||[]).length}</div>
               <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,textTransform:"uppercase"}}>NPCs</div>
             </div>
           </div>
@@ -3409,7 +3474,7 @@ function BandoScreen() {
       {/* Tabs do Bando */}
       <div style={{display:"flex",borderBottom:`1px solid ${C.border}`,marginBottom:24}}>
         {BANDO_TABS.map((t,i)=>(
-          <button key={t} onClick={()=>setTab(i)} style={{background:"transparent",border:"none",borderBottom:tab===i?`2px solid ${C.silver}`:"2px solid transparent",color:tab===i?C.white:C.grayDark,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"10px 14px",cursor:"pointer",transition:"all 0.15s"}}>{t}</button>
+          <button key={t} onClick={()=>setTab(i)} style={{background:"transparent",border:"none",borderBottom:tab===i?`2px solid ${C.silver}`:"2px solid transparent",color:tab===i?C.white:C.grayDark,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"10px 14px",cursor:"pointer",transition:"all 0.15s"}}>{t}</button>
         ))}
       </div>
 
@@ -3420,7 +3485,7 @@ function BandoScreen() {
           <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:16,flexWrap:"wrap"}}>
             <div style={{display:"flex",gap:6,alignItems:"center"}}>
               <button onClick={()=>upd("dinheiro",Math.max(0,bando.dinheiro-10))} style={{...btnSm,width:28,height:28,fontSize:13}}>−</button>
-              <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:24,color:"#50c050",minWidth:80,textAlign:"center"}}>R${bando.dinheiro}</span>
+              <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:24,color:"#50c050",minWidth:80,textAlign:"center"}}>R${bando.dinheiro}</span>
               <button onClick={()=>upd("dinheiro",bando.dinheiro+10)} style={{...btnSm,width:28,height:28,fontSize:13}}>+</button>
             </div>
             {[50,100,200,500].map(v=>(
@@ -3440,7 +3505,7 @@ function BandoScreen() {
                 background:n.nivel===bando.nivel?C.bg3:n.nivel<bando.nivel?"#0a140a":"transparent",
                 minWidth:70,textAlign:"center",
               }}>
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:n.nivel===bando.nivel?C.white:n.nivel<bando.nivel?"#50c050":C.grayDark}}>Nv.{n.nivel}</div>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:n.nivel===bando.nivel?C.white:n.nivel<bando.nivel?"#50c050":C.grayDark}}>Nv.{n.nivel}</div>
                 <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:2}}>R${n.custo}</div>
                 <div style={{fontSize:8,color:"#c09040",fontFamily:"'Inter',system-ui,sans-serif"}}>Not.{n.notoriedade}</div>
               </div>
@@ -3448,16 +3513,16 @@ function BandoScreen() {
           </div>
           {proximoNivel&&(
             <button onClick={evoluirBase} disabled={bando.dinheiro < proximoNivel.custo}
-              style={{background:"transparent",border:`1px solid ${bando.dinheiro>=proximoNivel.custo?C.silver:C.border}`,color:bando.dinheiro>=proximoNivel.custo?C.silver:C.grayDark,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"8px 22px",cursor:bando.dinheiro>=proximoNivel.custo?"pointer":"not-allowed",marginBottom:16}}>
+              style={{background:"transparent",border:`1px solid ${bando.dinheiro>=proximoNivel.custo?C.silver:C.border}`,color:bando.dinheiro>=proximoNivel.custo?C.silver:C.grayDark,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"8px 22px",cursor:bando.dinheiro>=proximoNivel.custo?"pointer":"not-allowed",marginBottom:16}}>
               Evoluir para Nível {bando.nivel+1} — R${proximoNivel.custo} {bando.dinheiro<proximoNivel.custo?`(faltam R${proximoNivel.custo-bando.dinheiro})`:""}
             </button>
           )}
-          {!proximoNivel&&<div style={{fontSize:11,color:"#c09040",fontFamily:"'Playfair Display',Georgia,serif",letterSpacing:2}}>✦ Nível Máximo Atingido</div>}
+          {!proximoNivel&&<div style={{fontSize:11,color:"#c09040",fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",letterSpacing:2}}>✦ Nível Máximo Atingido</div>}
 
           <SectionTitle>Notas do Bando</SectionTitle>
           <textarea value={bando.notas||""} onChange={e=>upd("notas",e.target.value)}
             placeholder="Objetivos, missões ativas, aliados, inimigos, segredos..."
-            style={{width:"100%",minHeight:100,background:C.bg2,border:`1px solid ${C.border}`,color:C.white,fontFamily:"'Crimson Text',Georgia,serif",fontSize:14,padding:"10px 12px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.8}}/>
+            style={{width:"100%",minHeight:100,background:C.bg2,border:`1px solid ${C.border}`,color:C.white,fontFamily:"'Montserrat',system-ui,sans-serif",fontSize:14,padding:"10px 12px",outline:"none",resize:"vertical",boxSizing:"border-box",lineHeight:1.8}}/>
 
           <SectionTitle>Log de Eventos</SectionTitle>
           <div style={{maxHeight:200,overflowY:"auto"}}>
@@ -3479,7 +3544,7 @@ function BandoScreen() {
             Cada Acomodação tem 3 NPCs disponíveis (Q, K, J). Inicialmente cada NPC dá um Bônus. Ao resolver sua Missão, passa a fornecer também o Bônus+.
             Não é possível ter dois NPCs com a mesma função.
           </div>
-          <button onClick={()=>setShowAddAcomo(true)} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"7px 18px",cursor:"pointer",marginBottom:16}}>
+          <button onClick={()=>setShowAddAcomo(true)} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"7px 18px",cursor:"pointer",marginBottom:16}}>
             + Adicionar NPC ao Bando
           </button>
 
@@ -3503,7 +3568,7 @@ function BandoScreen() {
                   <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
                     {ACOMODACOES[addAcomoKey].npcs.map(n=>(
                       <div key={n.carta} onClick={()=>setAddAcomoNpcCarta(n.carta)} style={{border:`1px solid ${addAcomoNpcCarta===n.carta?C.silver:C.border}`,background:addAcomoNpcCarta===n.carta?C.bg3:"transparent",padding:"10px 14px",cursor:"pointer",maxWidth:220}}>
-                        <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:12,color:addAcomoNpcCarta===n.carta?C.white:C.grayDark,marginBottom:4}}>{n.carta} — {n.nome}</div>
+                        <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:12,color:addAcomoNpcCarta===n.carta?C.white:C.grayDark,marginBottom:4}}>{n.carta} — {n.nome}</div>
                         <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:1.7}}>
                           <div><span style={{color:"#c09040"}}>Bônus:</span> {n.bonus}</div>
                           <div><span style={{color:C.silver}}>Bônus+:</span> {n.bonusPlus}</div>
@@ -3523,7 +3588,7 @@ function BandoScreen() {
               )}
 
               <div style={{display:"flex",gap:8}}>
-                <button onClick={addAcomodacao} disabled={!addAcomoKey||!addAcomoNpcCarta} style={{background:"transparent",border:`1px solid ${addAcomoKey&&addAcomoNpcCarta?C.silver:C.border}`,color:addAcomoKey&&addAcomoNpcCarta?C.silver:C.grayDark,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"6px 18px",cursor:addAcomoKey&&addAcomoNpcCarta?"pointer":"not-allowed"}}>Confirmar</button>
+                <button onClick={addAcomodacao} disabled={!addAcomoKey||!addAcomoNpcCarta} style={{background:"transparent",border:`1px solid ${addAcomoKey&&addAcomoNpcCarta?C.silver:C.border}`,color:addAcomoKey&&addAcomoNpcCarta?C.silver:C.grayDark,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"6px 18px",cursor:addAcomoKey&&addAcomoNpcCarta?"pointer":"not-allowed"}}>Confirmar</button>
                 <button onClick={()=>{setShowAddAcomo(false);setAddAcomoKey(null);setAddAcomoNpcCarta(null);setAddAcomoNome("");}} style={{background:"transparent",border:`1px solid ${C.border}`,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,padding:"6px 14px",cursor:"pointer"}}>Cancelar</button>
               </div>
             </div>
@@ -3542,7 +3607,7 @@ function BandoScreen() {
               <div key={a.id} style={{border:`1px solid ${a.missaoResolvida?"#3a5a3a":C.border}`,background:a.missaoResolvida?"#0a140a":C.bg2,padding:"14px 16px",marginBottom:6}}>
                 <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:10,marginBottom:8,flexWrap:"wrap"}}>
                   <div>
-                    <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,color:C.white,marginBottom:2}}>
+                    <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:C.white,marginBottom:2}}>
                       {a.npc_nome||npcData?.nome} <span style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>{a.npc_carta} · {a.acomodacao_key}</span>
                     </div>
                     {a.missaoResolvida&&<span style={{fontSize:9,color:"#50c050",fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2}}>✓ MISSÃO RESOLVIDA — BÔNUS+ ATIVO</span>}
@@ -3577,7 +3642,7 @@ function BandoScreen() {
             A Fase de Bando acontece quando a gangue fica na Base por ~3 dias. Puxe uma carta do baralho por Notoriedade atual ({bando.notoriedade} carta{bando.notoriedade>1?"s":""}). A-6 = tranquila · J/Q/K = missão de NPC · 7-10 = evento.
           </div>
 
-          <button onClick={puxarCartas} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 24px",cursor:"pointer",marginBottom:20,display:"block"}}>
+          <button onClick={puxarCartas} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 24px",cursor:"pointer",marginBottom:20,display:"block"}}>
             🃏 Puxar {bando.notoriedade} Carta{bando.notoriedade>1?"s":""} da Fase
           </button>
 
@@ -3586,7 +3651,7 @@ function BandoScreen() {
               <div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:20}}>
                 {faseBandoCartas.map((c,i)=>(
                   <div key={i} style={{border:`1px solid ${c.tipo==="missao_npc"?"#8b7030":c.tipo==="evento"?"#1a4a8a":c.tipo==="sina_comunitaria"?"#3a1a6a":C.border}`,background:c.tipo==="missao_npc"?"#1a1200":c.tipo==="evento"?"#000d1a":c.tipo==="sina_comunitaria"?"#0a001a":C.bg3,padding:"16px 20px",minWidth:160}}>
-                    <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:32,color:cardColFase(c),marginBottom:6}}>{c.display}</div>
+                    <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:32,color:cardColFase(c),marginBottom:6}}>{c.display}</div>
                     <div style={{fontSize:9,letterSpacing:2,fontFamily:"'Inter',system-ui,sans-serif",textTransform:"uppercase",color:c.tipo==="missao_npc"?"#c09040":c.tipo==="evento"?"#4070c0":c.tipo==="sina_comunitaria"?"#9040c0":C.grayDark,marginBottom:6}}>
                       {c.tipo==="tranquila"?"Fase Tranquila":c.tipo==="missao_npc"?"Missão de NPC":c.tipo==="evento"?"Evento na Base":c.tipo==="sina_comunitaria"?"Carta de Sina Comunitária":""}
                     </div>
@@ -3633,7 +3698,7 @@ function BandoScreen() {
           <div style={{fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:1.9,marginBottom:16}}>
             Quando a carta de um NPC é puxada na Fase de Bando, gere a missão dele aqui. Puxe 3 cartas — uma por coluna (Quem, Preciso, Reviravolta).
           </div>
-          <button onClick={()=>setMissaoGerada(gerarMissaoNPC())} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 24px",cursor:"pointer",marginBottom:20,display:"block"}}>
+          <button onClick={()=>setMissaoGerada(gerarMissaoNPC())} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:4,textTransform:"uppercase",padding:"10px 24px",cursor:"pointer",marginBottom:20,display:"block"}}>
             🎲 Gerar Missão de NPC
           </button>
 
@@ -3642,7 +3707,7 @@ function BandoScreen() {
               <div style={{fontSize:9,color:"#c09040",fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:3,textTransform:"uppercase",marginBottom:12}}>
                 Cartas puxadas: {missaoGerada.cartas.join(" · ")}
               </div>
-              <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:22,color:C.white,lineHeight:1.6,marginBottom:12}}>
+              <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:22,color:C.white,lineHeight:1.6,marginBottom:12}}>
                 {missaoGerada.preciso} a/o<br/>
                 <span style={{color:"#c09040"}}>{missaoGerada.quem}</span><br/>
                 <span style={{fontSize:16,color:C.gray}}>que {missaoGerada.reviravolta.toLowerCase()}.</span>
@@ -3736,7 +3801,7 @@ function Library({chars,onSelect,onCreate,onDelete,onImport}) {
         <DeleteModal charName={deleteTarget.nome} onConfirm={()=>{onDelete(deleteTarget.id);setDeleteTarget(null);}} onCancel={()=>setDeleteTarget(null)}/>
       )}
       <div style={{marginBottom:28,display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
-        <button onClick={onCreate} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"8px 22px",cursor:"pointer"}}
+        <button onClick={onCreate} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"8px 22px",cursor:"pointer"}}
           onMouseEnter={e=>e.currentTarget.style.background=C.bg3}
           onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
           + Nova Ficha
@@ -3777,7 +3842,7 @@ function Library({chars,onSelect,onCreate,onDelete,onImport}) {
                 :<div style={{width:44,height:52,border:`1px dashed ${C.border}`,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:18,color:C.border2}}>✦</span></div>
               }
               <div style={{flex:1,cursor:"pointer"}} onClick={()=>onSelect(c)}>
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:15,color:C.white}}>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:15,color:C.white}}>
                   {c.nome||<span style={{color:C.grayDark}}>Sem nome</span>}
                 </div>
                 <div style={{fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:2,display:"flex",gap:10,flexWrap:"wrap"}}>
@@ -3867,7 +3932,7 @@ function CardVisual({ card, size = "md", discarded = false, onClick, style: sx =
         <span style={{fontSize:s.rf, lineHeight:1}}>🃏</span>
       ) : (
         <>
-          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:s.rf,color:col,lineHeight:1,fontWeight:"bold"}}>{card.rank}</div>
+          <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:s.rf,color:col,lineHeight:1,fontWeight:"bold"}}>{card.rank}</div>
           <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:s.sf,color:col,lineHeight:1,marginTop:2}}>{card.suit}</div>
         </>
       )}
@@ -3922,7 +3987,7 @@ function CombatantRow({ combatant, isActive, onUpdate, onRemove, roundNum }) {
 
         {/* Nome + tipo */}
         <div style={{flex:1,minWidth:120}}>
-          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,color:c.incapaz?C.grayDark:C.white,textDecoration:c.incapaz?"line-through":"none"}}>
+          <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:c.incapaz?C.grayDark:C.white,textDecoration:c.incapaz?"line-through":"none"}}>
             {c.nome||"—"}
             {isNpc&&<span style={{marginLeft:6,fontSize:9,color:C.grayDark,letterSpacing:2,fontFamily:"'Inter',system-ui,sans-serif"}}>NdC {c.ndc||1}</span>}
           </div>
@@ -3942,7 +4007,7 @@ function CombatantRow({ combatant, isActive, onUpdate, onRemove, roundNum }) {
           <span style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,textTransform:"uppercase"}}>Vida</span>
           <div style={{display:"flex",alignItems:"center",gap:4}}>
             <button onClick={()=>upd({vidaAtual:Math.max(0,vida-1)})} style={{...btnSm,width:20,height:20,fontSize:12}}>−</button>
-            <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:18,color:vida<=2?C.red:vida<=vidaMax*0.5?"#c07020":C.white,width:36,textAlign:"center"}}>{vida}/{vidaMax}</span>
+            <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:18,color:vida<=2?C.red:vida<=vidaMax*0.5?"#c07020":C.white,width:36,textAlign:"center"}}>{vida}/{vidaMax}</span>
             <button onClick={()=>upd({vidaAtual:Math.min(vidaMax,vida+1)})} style={{...btnSm,width:20,height:20,fontSize:12}}>+</button>
           </div>
         </div>
@@ -3992,7 +4057,7 @@ function CombatantRow({ combatant, isActive, onUpdate, onRemove, roundNum }) {
               <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,marginBottom:2}}>DEFESA</div>
               <div style={{display:"flex",gap:3}}>
                 <button onClick={()=>upd({defesa:(defesa||5)-1})} style={{...btnSm,width:18,height:18,fontSize:10}}>−</button>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:C.white,width:24,textAlign:"center"}}>{defesa}</span>
+                <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.white,width:24,textAlign:"center"}}>{defesa}</span>
                 <button onClick={()=>upd({defesa:(defesa||5)+1})} style={{...btnSm,width:18,height:18,fontSize:10}}>+</button>
               </div>
             </div>
@@ -4000,7 +4065,7 @@ function CombatantRow({ combatant, isActive, onUpdate, onRemove, roundNum }) {
               <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,marginBottom:2}}>AÇÕES</div>
               <div style={{display:"flex",gap:3}}>
                 <button onClick={()=>upd({acoes:Math.max(0,(acoes||1)-1)})} style={{...btnSm,width:18,height:18,fontSize:10}}>−</button>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:C.white,width:24,textAlign:"center"}}>{acoes}</span>
+                <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.white,width:24,textAlign:"center"}}>{acoes}</span>
                 <button onClick={()=>upd({acoes:(acoes||1)+1})} style={{...btnSm,width:18,height:18,fontSize:10}}>+</button>
               </div>
             </div>
@@ -4008,7 +4073,7 @@ function CombatantRow({ combatant, isActive, onUpdate, onRemove, roundNum }) {
               <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,marginBottom:2}}>MOV.</div>
               <div style={{display:"flex",gap:3}}>
                 <button onClick={()=>upd({movimentos:Math.max(0,(movs||1)-1)})} style={{...btnSm,width:18,height:18,fontSize:10}}>−</button>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:C.white,width:24,textAlign:"center"}}>{movs}</span>
+                <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.white,width:24,textAlign:"center"}}>{movs}</span>
                 <button onClick={()=>upd({movimentos:(movs||1)+1})} style={{...btnSm,width:18,height:18,fontSize:10}}>+</button>
               </div>
             </div>
@@ -4065,7 +4130,7 @@ function CombatantRow({ combatant, isActive, onUpdate, onRemove, roundNum }) {
               <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,marginBottom:4,textTransform:"uppercase"}}>NPC Rápido — NdC</div>
               <div style={{display:"flex",gap:4,alignItems:"center"}}>
                 <button onClick={()=>upd({ndc:Math.max(1,(c.ndc||1)-1)})} style={{...btnSm,width:20,height:20,fontSize:11}}>−</button>
-                <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:C.white,width:20,textAlign:"center"}}>{c.ndc||1}</span>
+                <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.white,width:20,textAlign:"center"}}>{c.ndc||1}</span>
                 <button onClick={()=>upd({ndc:Math.min(6,(c.ndc||1)+1)})} style={{...btnSm,width:20,height:20,fontSize:11}}>+</button>
               </div>
               <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:4,lineHeight:1.6}}>
@@ -4255,12 +4320,12 @@ function CombatTracker({ chars, onClose }) {
       <div style={{borderBottom:`1px solid ${C.border}`,padding:"12px 20px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0,flexWrap:"wrap",gap:8,position:"sticky",top:0,background:"#000000f0",zIndex:10}}>
         <div style={{display:"flex",alignItems:"center",gap:16}}>
           <div>
-            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,letterSpacing:6,color:C.silver,textTransform:"uppercase"}}>Tracker de Combate</div>
+            <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,letterSpacing:6,color:C.silver,textTransform:"uppercase"}}>Tracker de Combate</div>
             <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,marginTop:1}}>RODADA {rodada} · {nAtivos} COMBATENTES ATIVOS</div>
           </div>
           {activeC&&<div style={{padding:"6px 14px",border:`1px solid ${C.silver}`,background:C.bg3}}>
             <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,textTransform:"uppercase"}}>turno atual</div>
-            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:13,color:C.white,marginTop:1}}>{activeC.nome}</div>
+            <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:13,color:C.white,marginTop:1}}>{activeC.nome}</div>
           </div>}
         </div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
@@ -4282,7 +4347,7 @@ function CombatTracker({ chars, onClose }) {
           {critRoll&&(
             <div style={{border:`1px solid ${critRoll.isCrit?"#8b7030":C.redDim}`,background:critRoll.isCrit?"#1a1200":"#200000",padding:"12px 16px",marginBottom:16,display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
               <div>
-                <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:11,letterSpacing:4,color:critRoll.isCrit?"#c09040":C.red,textTransform:"uppercase",marginBottom:4}}>{critRoll.type} — {critRoll.roll}</div>
+                <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:11,letterSpacing:4,color:critRoll.isCrit?"#c09040":C.red,textTransform:"uppercase",marginBottom:4}}>{critRoll.type} — {critRoll.roll}</div>
                 <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:13,color:C.white,lineHeight:1.6}}>{critRoll.result}</div>
               </div>
               <button onClick={()=>setCritRoll(null)} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:14,marginLeft:12,flexShrink:0}}>✕</button>
@@ -4291,7 +4356,7 @@ function CombatTracker({ chars, onClose }) {
 
           {/* Controles de rodada */}
           <div style={{display:"flex",gap:10,marginBottom:20,flexWrap:"wrap",alignItems:"center"}}>
-            <button onClick={drawAllCards} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"7px 18px",cursor:"pointer"}}>
+            <button onClick={drawAllCards} style={{background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"7px 18px",cursor:"pointer"}}>
               🃏 Puxar Cartas — Iniciativa
             </button>
             <button onClick={nextTurn} disabled={combatants.length===0} style={{background:combatants.length>0?C.bg3:"transparent",border:`1px solid ${combatants.length>0?C.border2:C.border}`,color:combatants.length>0?C.white:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"7px 18px",cursor:combatants.length>0?"pointer":"not-allowed"}}>
@@ -4359,7 +4424,7 @@ function CombatTracker({ chars, onClose }) {
                 <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,marginBottom:4,textTransform:"uppercase"}}>NdC (1–6)</div>
                 <div style={{display:"flex",gap:4,alignItems:"center"}}>
                   <button onClick={()=>setAddNpcNdc(n=>Math.max(1,n-1))} style={{...btnSm,width:22,height:22,fontSize:12}}>−</button>
-                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:18,color:C.white,width:24,textAlign:"center"}}>{addNpcNdc}</span>
+                  <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:18,color:C.white,width:24,textAlign:"center"}}>{addNpcNdc}</span>
                   <button onClick={()=>setAddNpcNdc(n=>Math.min(6,n+1))} style={{...btnSm,width:22,height:22,fontSize:12}}>+</button>
                 </div>
                 <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:2}}>Vida:{addNpcNdc*3} Ações:{addNpcNdc+1}</div>
@@ -4368,7 +4433,7 @@ function CombatTracker({ chars, onClose }) {
                 <div style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,marginBottom:4,textTransform:"uppercase"}}>Quantidade</div>
                 <div style={{display:"flex",gap:4,alignItems:"center"}}>
                   <button onClick={()=>setAddNpcQtd(n=>Math.max(1,n-1))} style={{...btnSm,width:22,height:22,fontSize:12}}>−</button>
-                  <span style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:18,color:C.white,width:24,textAlign:"center"}}>{addNpcQtd}</span>
+                  <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:18,color:C.white,width:24,textAlign:"center"}}>{addNpcQtd}</span>
                   <button onClick={()=>setAddNpcQtd(n=>n+1)} style={{...btnSm,width:22,height:22,fontSize:12}}>+</button>
                 </div>
               </div>
@@ -4382,7 +4447,7 @@ function CombatTracker({ chars, onClose }) {
             <div style={{padding:"10px 14px",display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:8}}>
               {[["A","14","#c09040","+1 Testes de Violência"],["K","13","#c09040","+1 Movimento"],["Q","12","#c09040","+1 Ação de Combate"],["J","11","#c09040","+1 em qualquer teste"],["🃏","0",C.grayDark,"Valor nulo — age por último"]].map(([rank,val,col,bonus])=>(
                 <div key={rank} style={{display:"flex",gap:8,alignItems:"center"}}>
-                  <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:16,color:col,width:24,textAlign:"center"}}>{rank}</div>
+                  <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:col,width:24,textAlign:"center"}}>{rank}</div>
                   <div>
                     <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>valor {val}</div>
                     <div style={{fontSize:10,color:C.white,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:1.4}}>{bonus}</div>
@@ -4487,7 +4552,7 @@ function CampaignScreen({ chars }) {
       <button onClick={createCamp} disabled={!form.nome.trim()} style={{
         background:"transparent",border:`1px solid ${form.nome.trim()?C.silver:C.border}`,
         color:form.nome.trim()?C.silver:C.grayDark,
-        fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:4,
+        fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:4,
         textTransform:"uppercase",padding:"10px 24px",cursor:form.nome.trim()?"pointer":"not-allowed",marginTop:20
       }}>Criar Campanha →</button>
     </div>
@@ -4499,7 +4564,7 @@ function CampaignScreen({ chars }) {
       <div style={{maxWidth:820,margin:"0 auto",padding:"20px 0"}}>
         <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:24,flexWrap:"wrap",gap:12}}>
           <div>
-            <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:20,color:C.white}}>{camp.nome}</div>
+            <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:20,color:C.white}}>{camp.nome}</div>
             {camp.juiz&&<div style={{fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:2}}>Juiz: {camp.juiz}</div>}
           </div>
           <button onClick={()=>{ persist(null); setCamp(null); setMode("home"); setForm({nome:"",juiz:"",descricao:""}); }} style={{
@@ -4523,7 +4588,7 @@ function CampaignScreen({ chars }) {
                 <div key={p.id} style={{border:`1px solid ${C.border}`,background:C.bg2,padding:"12px 14px"}}>
                   <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}>
                     <div style={{flex:1}}>
-                      <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:14,color:C.white}}>{p.nome}</div>
+                      <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:C.white}}>{p.nome}</div>
                       <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:1}}>
                         {p.conceito||"—"} · Nv.{p.nivel}{p.jogador?` · ${p.jogador}`:""}
                       </div>
@@ -4536,7 +4601,7 @@ function CampaignScreen({ chars }) {
                       <span style={{fontSize:8,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,textTransform:"uppercase"}}>Vida</span>
                       <div style={{display:"flex",alignItems:"center",gap:6}}>
                         <button onClick={()=>updVida(p.id,-1)} style={{...btnSm,width:18,height:18,fontSize:11}}>−</button>
-                        <span style={{fontSize:12,color:vidaCor,fontFamily:"'Playfair Display',Georgia,serif"}}>{p.vidaAtual}/{p.vidaBase}</span>
+                        <span style={{fontSize:12,color:vidaCor,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif"}}>{p.vidaAtual}/{p.vidaBase}</span>
                         <button onClick={()=>updVida(p.id,+1)} style={{...btnSm,width:18,height:18,fontSize:11}}>+</button>
                       </div>
                     </div>
@@ -4610,7 +4675,7 @@ function CampaignScreen({ chars }) {
 
 // ── Estilos compartilhados ────────────────────────────────────────────────────
 const btnBack      = {background:"transparent",border:"none",color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",fontSize:11,cursor:"pointer",letterSpacing:1,marginBottom:20,padding:0};
-const btnPrimary   = {background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:4,textTransform:"uppercase",padding:"10px 24px",cursor:"pointer"};
+const btnPrimary   = {background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:4,textTransform:"uppercase",padding:"10px 24px",cursor:"pointer"};
 const btnSecondary = {background:"transparent",border:`1px solid ${C.border2}`,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",fontSize:10,letterSpacing:2,textTransform:"uppercase",padding:"7px 14px",cursor:"pointer"};
 const labelSt      = {fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:2,marginBottom:4,textTransform:"uppercase"};
 const errSt        = {fontSize:11,color:C.red,fontFamily:"'Inter',system-ui,sans-serif"};
@@ -4673,7 +4738,7 @@ export default function App() {
       {/* NAV */}
       <div style={{borderBottom:`1px solid ${C.border}`,padding:"18px 0",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:0,flexWrap:"wrap",gap:12}}>
         <div style={{cursor:"pointer"}} onClick={()=>{setView("library");setActiveId(null);}}>
-          <div style={{fontFamily:"'Playfair Display',Georgia,serif",fontSize:18,letterSpacing:8,color:C.silver,textTransform:"uppercase"}}>
+          <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:18,letterSpacing:8,color:C.silver,textTransform:"uppercase"}}>
             Prata <span style={{color:C.border2}}>&</span> Chumbo
           </div>
           <div style={{fontSize:10,letterSpacing:5,color:C.grayDark,textTransform:"uppercase",fontFamily:"'Inter',system-ui,sans-serif",marginTop:2}}>Fichas de Personagem · RPG</div>
@@ -4696,7 +4761,7 @@ export default function App() {
       {view!=="sheet"&&(
         <div style={{borderBottom:`1px solid ${C.border}`,display:"flex",gap:0,marginBottom:36}}>
           {NAV_TABS.map(t=>(
-            <button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",border:"none",borderBottom:view===t.id?`2px solid ${C.silver}`:"2px solid transparent",color:view===t.id?C.white:C.grayDark,fontFamily:"'Playfair Display',Georgia,serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"10px 16px",cursor:"pointer",transition:"all 0.15s"}}>{t.label}</button>
+            <button key={t.id} onClick={()=>setView(t.id)} style={{background:"transparent",border:"none",borderBottom:view===t.id?`2px solid ${C.silver}`:"2px solid transparent",color:view===t.id?C.white:C.grayDark,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",padding:"10px 16px",cursor:"pointer",transition:"all 0.15s"}}>{t.label}</button>
           ))}
         </div>
       )}
