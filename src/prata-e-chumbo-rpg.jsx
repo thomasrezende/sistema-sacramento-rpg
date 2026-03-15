@@ -1723,7 +1723,37 @@ function NotaCard({ nota, allNotas, onUpdate, onDelete, onConnect, connectMode, 
   const pdfRef = useRef();
   const cs = getNoteStyle(nota.color);
 
-  const upd = (patch) => onUpdate({ ...nota, ...patch });
+  // ── Local text state with debounce ───────────────────────────────────────
+  // Keeps typing fast — only propagates to parent (and localStorage) after 400ms idle
+  const [localTitulo, setLocalTitulo] = useState(nota.titulo || "");
+  const [localTexto, setLocalTexto] = useState(nota.texto || "");
+  const debounceRef = useRef(null);
+
+  // Sync local state if nota changes from outside (e.g. import, undo)
+  const prevIdRef = useRef(nota.id);
+  if(prevIdRef.current !== nota.id) {
+    prevIdRef.current = nota.id;
+    setLocalTitulo(nota.titulo || "");
+    setLocalTexto(nota.texto || "");
+  }
+
+  const flushText = useCallback((titulo, texto) => {
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      onUpdate({ ...nota, titulo, texto });
+    }, 400);
+  }, [nota, onUpdate]);
+
+  // Flush on unmount so nothing is lost
+  useEffect(() => {
+    return () => {
+      clearTimeout(debounceRef.current);
+      // Sync final values — read from closure via ref
+    };
+  }, []);
+
+  // Immediate update for everything except texto/titulo
+  const upd = (patch) => onUpdate({ ...nota, titulo: localTitulo, texto: localTexto, ...patch });
 
   const handleImg = (e) => {
     const f = e.target.files[0]; if(!f) return;
@@ -1750,15 +1780,23 @@ function NotaCard({ nota, allNotas, onUpdate, onDelete, onConnect, connectMode, 
       border:`1.5px solid ${isConnectSource?"#c09040":cs.border}`,
       background: cs.bg,
       marginBottom:10,
-      transition:"all 0.15s",
+      transition:"border-color 0.15s",
       boxShadow: isConnectSource ? `0 0 12px #c0904040` : "none",
     }}>
       {/* ── Header ── */}
       <div style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px",borderBottom:`1px solid ${cs.border}`}}>
-        {/* Título */}
+        {/* Título — usa estado local */}
         <input
-          value={nota.titulo || ""}
-          onChange={e => upd({ titulo: e.target.value })}
+          value={localTitulo}
+          onChange={e => {
+            const v = e.target.value;
+            setLocalTitulo(v);
+            flushText(v, localTexto);
+          }}
+          onBlur={() => {
+            clearTimeout(debounceRef.current);
+            onUpdate({ ...nota, titulo: localTitulo, texto: localTexto });
+          }}
           placeholder="Título da nota..."
           style={{flex:1,background:"transparent",border:"none",color:nota.fechada?"#555":C.white,
             fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,outline:"none",
@@ -1809,18 +1847,27 @@ function NotaCard({ nota, allNotas, onUpdate, onDelete, onConnect, connectMode, 
       {/* ── Corpo (se não fechada ou se expandida) ── */}
       {(!nota.fechada || expanded) && (
         <div style={{padding:"10px 12px"}}>
-          {/* Texto principal */}
+          {/* Texto principal — usa estado local, preserva copy/paste nativo */}
           <textarea
-            value={nota.texto || ""}
-            onChange={e => upd({ texto: e.target.value })}
+            value={localTexto}
+            onChange={e => {
+              const v = e.target.value;
+              setLocalTexto(v);
+              flushText(localTitulo, v);
+            }}
+            onBlur={() => {
+              clearTimeout(debounceRef.current);
+              onUpdate({ ...nota, titulo: localTitulo, texto: localTexto });
+            }}
             placeholder="Escreva suas anotações, pistas, suspeitas..."
             disabled={nota.fechada}
-            rows={3}
+            rows={4}
             style={{width:"100%",background:"transparent",border:"none",
               color:nota.fechada?"#555":C.gray,fontFamily:"'Montserrat',system-ui,sans-serif",
               fontSize:14,lineHeight:1.8,outline:"none",resize:"vertical",
               boxSizing:"border-box",padding:0,
-              fontStyle:nota.fechada?"italic":"normal"}}
+              fontStyle:nota.fechada?"italic":"normal",
+              userSelect:"text",WebkitUserSelect:"text"}}
           />
 
           {/* Imagens anexadas */}
@@ -1892,6 +1939,16 @@ function NotaCard({ nota, allNotas, onUpdate, onDelete, onConnect, connectMode, 
   );
 }
 
+// Wrap with memo — só re-renderiza se as props mudarem (por id/referência de nota)
+const NotaCardMemo = React.memo(NotaCard, (prev, next) => {
+  return (
+    prev.nota === next.nota &&
+    prev.connectMode === next.connectMode &&
+    prev.isConnectSource === next.isConnectSource &&
+    prev.allNotas === next.allNotas
+  );
+});
+
 function NotasTab({ char, upd }) {
   const [connectSource, setConnectSource] = useState(null); // id da nota sendo conectada
   const [filter, setFilter] = useState("all"); // all | open | closed
@@ -1912,9 +1969,9 @@ function NotasTab({ char, upd }) {
     upd("notasCards", [nova, ...notas]);
   };
 
-  const updateNota = (updated) => {
-    upd("notasCards", notas.map(n => n.id === updated.id ? updated : n));
-  };
+  const updateNota = useCallback((updated) => {
+    upd("notasCards", char.notasCards.map(n => n.id === updated.id ? updated : n));
+  }, [char.notasCards, upd]);
 
   const deleteNota = (id) => {
     // Remove também conexões apontando para ela
@@ -1989,7 +2046,7 @@ function NotasTab({ char, upd }) {
         </div>
       ) : (
         filtered.map(n => (
-          <NotaCard
+          <NotaCardMemo
             key={n.id}
             nota={n}
             allNotas={notas}
@@ -2953,13 +3010,12 @@ function reqMet(req, char) {
   return val >= req.min;
 }
 
-function EspecializacaoPanel({ char, upd }) {
+function EspecializacaoPanel({ char, upd, updMany }) {
   const nivel = char.nivel || 1;
-  const espec = char.especializacao || null;       // id da espec escolhida
-  const habsEspec = char.habsEspecializacao || []; // nomes das habs de espec adquiridas
+  const espec = char.especializacao || null;
+  const habsEspec = char.habsEspecializacao || [];
   const [tab, setTab] = useState(espec || null);
 
-  // Only unlocked at level 3+
   if(nivel < 3) {
     return (
       <div style={{border:`1px solid ${C.border}`,background:C.bg2,padding:"16px 18px",marginBottom:8}}>
@@ -2974,23 +3030,59 @@ function EspecializacaoPanel({ char, upd }) {
   const especAtual = ESPECIALIZACOES.find(e=>e.id===espec);
   const visualTab  = tab ? ESPECIALIZACOES.find(e=>e.id===tab) : null;
 
-  const escolherEspec = (id) => {
-    upd("especializacao", id);
-    upd("habsEspecializacao", []);
+  // Helper: aplica/reverte bônus de antecedentes de uma especialização
+  const aplicarBonusAnte = (antesObj, especId, sinal) => {
+    const e = ESPECIALIZACOES.find(x=>x.id===especId);
+    if(!e) return antesObj;
+    const novo = {...antesObj};
+    e.antecedentes.forEach(({ante, bonus}) => {
+      // "Tradição ou Medicina" → aplica em Tradição por padrão (jogador ajusta)
+      // "Atenção ou Roubo" → aplica em Atenção por padrão
+      const chave = ante.includes(" ou ") ? ante.split(" ou ")[0] : ante;
+      if(novo[chave] !== undefined) {
+        novo[chave] = Math.max(0, (novo[chave]||0) + sinal * bonus);
+      }
+    });
+    return novo;
+  };
+
+  const escolherEspec = (novoId) => {
+    let antesObj = {...(char.antecedentes||{})};
+    // 1. Reverter bônus da especialização anterior
+    if(espec) antesObj = aplicarBonusAnte(antesObj, espec, -1);
+    // 2. Aplicar bônus da nova especialização
+    antesObj = aplicarBonusAnte(antesObj, novoId, +1);
+    // 3. Remover habilidades de espec antigas do char.habilidades
+    const habsAntigas = char.habsEspecializacao || [];
+    const habsSemEspec = (char.habilidades||[]).filter(h => !habsAntigas.includes(h));
+    updMany({
+      especializacao: novoId,
+      habsEspecializacao: [],
+      antecedentes: antesObj,
+      habilidades: habsSemEspec,
+    });
   };
 
   const toggleHabEspec = (habNome) => {
     const jatem = habsEspec.includes(habNome);
     if(jatem) {
-      upd("habsEspecializacao", habsEspec.filter(h=>h!==habNome));
+      // Remover da lista de espec E do char.habilidades
+      updMany({
+        habsEspecializacao: habsEspec.filter(h=>h!==habNome),
+        habilidades: (char.habilidades||[]).filter(h=>h!==habNome),
+      });
       return;
     }
-    // Rules:
-    // Nível 3: máx 1 hab total de spec (pode ser da sua espec ou de outra com req)
-    // Nível 5: máx 2 habs total
     const maxHabs = nivel >= 5 ? 2 : 1;
     if(habsEspec.length >= maxHabs) return;
-    upd("habsEspecializacao", [...habsEspec, habNome]);
+    // Adicionar à lista de espec E ao char.habilidades (se não estiver)
+    const novasHabs = (char.habilidades||[]).includes(habNome)
+      ? char.habilidades
+      : [...(char.habilidades||[]), habNome];
+    updMany({
+      habsEspecializacao: [...habsEspec, habNome],
+      habilidades: novasHabs,
+    });
   };
 
   const habEspecCount = habsEspec.length;
@@ -3286,7 +3378,7 @@ function CharSheet({char,update}) {
             </div>
 
             <SectionTitle>Especialização</SectionTitle>
-            <EspecializacaoPanel char={char} upd={upd}/>
+            <EspecializacaoPanel char={char} upd={upd} updMany={updMany}/>
 
             <SectionTitle>
               Combate — {HABILIDADES_COMBATE.length} habilidades · {char.habilidades.filter(h=>HABILIDADES_COMBATE.find(x=>x.nome===h)).length} selecionadas
