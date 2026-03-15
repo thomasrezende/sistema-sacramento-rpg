@@ -296,13 +296,41 @@ function CirculosDorWidget({ativos,onChange}) {
   );
 }
 
-// ─── ADD HAB FORM ─────────────────────────────────────────────────────────────
+// ─── ADD HAB FORM — nome + descrição (para companheiro) ─────────────────────
 function AddHabForm({onAdd}) {
-  const [val,setVal]=useState("");
+  const [nome,setNome]=useState("");
+  const [desc,setDesc]=useState("");
   return (
-    <div style={{display:"flex",gap:8,alignItems:"center"}}>
-      <div style={{flex:1}}><Inp value={val} onChange={setVal} placeholder="Nova habilidade do companheiro..."/></div>
-      <button onClick={()=>{if(val.trim()){onAdd(val.trim());setVal("");}}} style={{background:"transparent",border:`1px solid ${C.border2}`,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",fontSize:11,padding:"5px 14px",cursor:"pointer",letterSpacing:1,whiteSpace:"nowrap"}}>Adicionar</button>
+    <div style={{display:"flex",flexDirection:"column",gap:6}}>
+      <div style={{display:"flex",gap:8,alignItems:"center"}}>
+        <div style={{flex:1}}><Inp value={nome} onChange={setNome} placeholder="Nome da habilidade..."/></div>
+        <button onClick={()=>{if(nome.trim()){onAdd({nome:nome.trim(),desc:desc.trim()});setNome("");setDesc("");}}}
+          style={{background:"transparent",border:`1px solid ${C.border2}`,color:C.silverDim,fontFamily:"'Inter',system-ui,sans-serif",fontSize:11,padding:"5px 14px",cursor:"pointer",letterSpacing:1,whiteSpace:"nowrap"}}>Adicionar</button>
+      </div>
+      <Inp value={desc} onChange={setDesc} placeholder="Descrição (opcional)..." style={{fontSize:12}}/>
+    </div>
+  );
+}
+
+// ─── COMPANHEIRO SKILL CARD ───────────────────────────────────────────────────
+function CompHabCard({h, onUpdate, onDelete}) {
+  const [open,setOpen] = useState(false);
+  const nome = typeof h === "string" ? h : (h.nome||"");
+  const desc = typeof h === "string" ? "" : (h.desc||"");
+  return (
+    <div style={{border:`1px solid ${C.silver}`,background:C.bg3,marginBottom:4,width:"100%"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px"}}>
+        <span style={{flex:1,fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:C.white,cursor:"pointer"}} onClick={()=>setOpen(o=>!o)}>{nome||<span style={{color:C.grayDark,fontStyle:"italic"}}>sem nome</span>}</span>
+        {desc&&<button onClick={()=>setOpen(o=>!o)} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:12,padding:"0 4px"}}>{open?"▲":"▼"}</button>}
+        <button onClick={onDelete} style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:11,padding:0,lineHeight:1}}
+          onMouseEnter={e=>e.currentTarget.style.color=C.red} onMouseLeave={e=>e.currentTarget.style.color=C.grayDark}>✕</button>
+      </div>
+      {open&&(
+        <div style={{borderTop:`1px solid ${C.border}`,padding:"8px 12px",display:"flex",flexDirection:"column",gap:6}}>
+          <Inp value={nome} onChange={v=>onUpdate({nome:v,desc})} placeholder="Nome..."/>
+          <Inp value={desc} onChange={v=>onUpdate({nome,desc:v})} placeholder="Descrição..." style={{fontSize:12}}/>
+        </div>
+      )}
     </div>
   );
 }
@@ -560,6 +588,7 @@ const createBlankChar = () => ({
   historicoFinanceiro:[],
   montaria:{nome:"",tipo:"Cavalo",potencia:0,resistencia:0,fidelidade:0,habilidades:[],inventario:[],imagem:null,vidaBase:6,vidaAtual:6,circulosDorAtivos:[],defesa:5,acoes:1,movimentos:1},
   notas:"", pontosSina:0, honra:0,
+  especializacao: null, habsEspecializacao: [],
   cartasSina:[], // [{id, rank, suit, usada}]
   balasPorArma:{}, // {nomeArma: quantidade}
   cartasSina:[], // [{id, rank, suit, usada}]
@@ -2704,6 +2733,370 @@ function XPChecklist({ char, upd }) {
   );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// ─── ESPECIALIZAÇÕES ─────────────────────────────────────────────────────────
+// Nível 3: escolhe especialização → ganha antecedentes + 1 habilidade
+// Nível 5: pega a 2ª habilidade da sua espec, OU 1 habilidade de outra (req)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+const ESPECIALIZACOES = [
+  {
+    id: "combatente",
+    nome: "O Combatente",
+    antecedentes: [{ante:"Violência",bonus:1},{ante:"Suor",bonus:1}],
+    habilidades: [
+      {
+        nome: "Carga de Baioneta",
+        desc: "Ao se mover em direção a um inimigo e atacar no mesmo turno, o dano causado é aumentado em +1. Pode ser usada uma vez por rodada.",
+        req: null,
+      },
+      {
+        nome: "Resistência de Praça",
+        desc: "Quando os Círculos de Vida chegarem a 2 ou menos, o Combatente não sofre penalidades em Testes de Violência até o fim do combate.",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "pesquisador",
+    nome: "O Pesquisador",
+    antecedentes: [{ante:"Tradição ou Medicina",bonus:1},{ante:"Atenção",bonus:1}],
+    habilidades: [
+      {
+        nome: "Análise de Campo",
+        desc: "Antes de qualquer Teste, pode gastar uma Ação de Combate (ou um turno fora de combate) para observar a situação: recebe +2 no próximo teste relacionado ao que observou. Bônus não acumula.",
+        req: null,
+      },
+      {
+        nome: "Memória Treinada",
+        desc: "Nunca precisa rolar para lembrar de informações já vistas por outros players em outros momentos da campanha.",
+        req: {ante:"Intelecto",min:3},
+      },
+    ],
+  },
+  {
+    id: "negociador",
+    nome: "O Negociador",
+    antecedentes: [{ante:"Negócios",bonus:1},{ante:"Atenção ou Roubo",bonus:1}],
+    habilidades: [
+      {
+        nome: "Palavra de Oficial",
+        desc: "Uma vez por sessão, pode comprar um item ou encerrar um conflito sem rolagem. Caso um NPC ou PJ consiga evitar, um teste estendido de Negócios contra Suor se inicia — vence quem ganhar 2 de 3 testes.",
+        req: {ante:"Negócios",min:3},
+      },
+      {
+        nome: "Leitura de Intenção",
+        desc: "Ao observar um PJ ou NPC em conversa, pode pedir ao Juiz uma informação sobre a ficha daquele personagem, sem rolagem. Uma vez por sessão.",
+        req: {ante:"Roubo",min:3},
+      },
+    ],
+  },
+  {
+    id: "telegrafista",
+    nome: "O Telegrafista",
+    antecedentes: [{ante:"Tradição",bonus:1},{ante:"Negócios",bonus:1}],
+    habilidades: [
+      {
+        nome: "Interceptação",
+        desc: "Com acesso a um telégrafo, pode tentar (Tradição DT 6) capturar uma mensagem inimiga. O Juiz fornece uma informação estratégica verdadeira.",
+        req: null,
+      },
+      {
+        nome: "Falsa Ordem",
+        desc: "Uma vez por sessão, pode falsificar uma ordem militar escrita. NPCs de patente inferior obedecem sem teste; superiores exigem Negócios DT 7.",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "engenheiro",
+    nome: "O Engenheiro de Campo",
+    antecedentes: [{ante:"Tradição",bonus:1},{ante:"Roubo",bonus:1}],
+    habilidades: [
+      {
+        nome: "Armadilha de Campo",
+        desc: "Com 10 minutos de preparação (1 rodada em combate) e materiais básicos, monta uma armadilha que aplica Derrubado + 1 Círculo de Dor ao primeiro que a acionar.",
+        req: null,
+      },
+      {
+        nome: "Fortificação Rápida",
+        desc: "Em 2 turnos de combate (sem atacar), melhora a cobertura de 1 ponto. Cobertura normal vira reforçada (Defesa 8 ao invés de 7).",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "atirador",
+    nome: "O Atirador de Elite",
+    antecedentes: [{ante:"Violência",bonus:1},{ante:"Roubo",bonus:1}],
+    habilidades: [
+      {
+        nome: "Tiro Cirúrgico",
+        desc: "Uma vez por combate, pode declarar que mira em parte específica do corpo (mão ou perna). Se acertar: Imobilizado (perna) ou Desarmado automaticamente (mão), além do dano normal.",
+        req: null,
+      },
+      {
+        nome: "Paciência do Caçador",
+        desc: "Se passar 1 turno inteiro sem se mover (apenas mirando), o próximo ataque tem +2 e ignora bônus de cobertura do alvo.",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "contrabandista",
+    nome: "O Contrabandista",
+    antecedentes: [{ante:"Roubo",bonus:1},{ante:"Negócios",bonus:1}],
+    habilidades: [
+      {
+        nome: "Esconderijo Perfeito",
+        desc: "Uma vez por sessão, declara que tem um item escondido no corpo — faca, chave mestra de uso único ou frasco de cura (+1 Vida) — que ninguém encontrou.",
+        req: null,
+      },
+      {
+        nome: "Contato da Fronteira",
+        desc: "Uma vez por sessão, acessa um NPC de contato que vende ou informa algo específico (item ou informação). O preço é +50% do normal.",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "clerigo",
+    nome: "O Clérigo",
+    antecedentes: [{ante:"Negócios",bonus:1},{ante:"Medicina",bonus:1}],
+    habilidades: [
+      {
+        nome: "Discurso de Moral",
+        desc: "Uma vez por combate, gasta 1 Ação de Combate para proferir um sermão breve. Todos os aliados que ouvirem removem a condição Abalado e recebem +1 em testes de Suor.",
+        req: null,
+      },
+      {
+        nome: "Proteção Diplomática",
+        desc: "Em confrontos com autoridades civis ou militares, nunca é atacado primeiro se estiver desarmado — exceto se ele mesmo atacar.",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "cavaleiro",
+    nome: "O Cavaleiro",
+    antecedentes: [{ante:"Violência",bonus:1},{ante:"Suor",bonus:1}],
+    habilidades: [
+      {
+        nome: "Carga de Cavalaria",
+        desc: "Montado e usando Movimento para avançar antes do ataque: +2 de dano e aplica Derrubado se acertar. Pode ser feito 1× por turno.",
+        req: {ante:"Montaria",min:3},
+      },
+      {
+        nome: "Controle Instintivo",
+        desc: "Nunca precisa rolar para controlar a montaria em combate. A montaria age na mesma Iniciativa que o cavaleiro.",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "guia",
+    nome: "O Guia",
+    antecedentes: [{ante:"Atenção",bonus:1},{ante:"Tradição",bonus:1}],
+    habilidades: [
+      {
+        nome: "Rota Oculta",
+        desc: "Uma vez por sessão, encontra um caminho alternativo que evita um encontro inimigo ou reduz o tempo de viagem à metade. Não requer teste.",
+        req: null,
+      },
+      {
+        nome: "Conhecimento do Terreno",
+        desc: "Em campo aberto ou floresta, o grupo inteiro tem +1 em Iniciativa. O Guia nunca é surpreendido em terreno natural.",
+        req: null,
+      },
+    ],
+  },
+  {
+    id: "peao",
+    nome: "O Peão",
+    antecedentes: [{ante:"Suor",bonus:1},{ante:"Montaria",bonus:1}],
+    habilidades: [
+      {
+        nome: "Montaria como Arma",
+        desc: "Montado e usando 1 Movimento para avançar, pode usar a montaria para aplicar a manobra Empurrar sem gastar Ação de Combate separada. Se o alvo colidir com algo, toma +1 de dano adicional e tem −1 na defesa pelo próximo turno.",
+        req: {ante:"Montaria",min:2},
+      },
+      {
+        nome: "Resistência de Boi",
+        desc: "Ao receber dano que causaria uma condição (Derrubado, Abalado, Sangrando), pode fazer um Teste de Suor DT 6 para ignorar a condição — o dano ainda se aplica, mas a condição não. Pode ser tentado 1× por condição por combate.",
+        req: {ante:"Suor",min:2},
+      },
+    ],
+  },
+  {
+    id: "salteador",
+    nome: "O Salteador",
+    antecedentes: [{ante:"Roubo",bonus:1},{ante:"Violência",bonus:1}],
+    habilidades: [
+      {
+        nome: "Assalto Relâmpago",
+        desc: "Se atacar um alvo que ainda não agiu nesta rodada (usando a Iniciativa como referência), o ataque causa +2 de dano. Pode ser usado 1× por combate.",
+        req: null,
+      },
+      {
+        nome: "Desaparecer no Caos",
+        desc: "Uma vez por combate, imediatamente após causar dano a um alvo, pode gastar 1 Movimento para sumir de vista (cobertura total). O próximo ataque contra seu alvo anterior nesta rodada tem −2.",
+        req: null,
+      },
+    ],
+  },
+];
+
+// Check if req is met
+function reqMet(req, char) {
+  if(!req) return true;
+  const val = (char.antecedentes||{})[req.ante] || (char.atributos||{})[req.ante] || 0;
+  return val >= req.min;
+}
+
+function EspecializacaoPanel({ char, upd }) {
+  const nivel = char.nivel || 1;
+  const espec = char.especializacao || null;       // id da espec escolhida
+  const habsEspec = char.habsEspecializacao || []; // nomes das habs de espec adquiridas
+  const [tab, setTab] = useState(espec || null);
+
+  // Only unlocked at level 3+
+  if(nivel < 3) {
+    return (
+      <div style={{border:`1px solid ${C.border}`,background:C.bg2,padding:"16px 18px",marginBottom:8}}>
+        <div style={{fontFamily:"'Sora',system-ui,sans-serif",fontSize:10,letterSpacing:3,color:C.grayDark,textTransform:"uppercase",marginBottom:6}}>Especialização</div>
+        <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:12,color:C.grayDark,lineHeight:1.8}}>
+          Disponível a partir do <span style={{color:C.silver}}>Nível 3</span>. Você está no nível {nivel}.
+        </div>
+      </div>
+    );
+  }
+
+  const especAtual = ESPECIALIZACOES.find(e=>e.id===espec);
+  const visualTab  = tab ? ESPECIALIZACOES.find(e=>e.id===tab) : null;
+
+  const escolherEspec = (id) => {
+    upd("especializacao", id);
+    upd("habsEspecializacao", []);
+  };
+
+  const toggleHabEspec = (habNome) => {
+    const jatem = habsEspec.includes(habNome);
+    if(jatem) {
+      upd("habsEspecializacao", habsEspec.filter(h=>h!==habNome));
+      return;
+    }
+    // Rules:
+    // Nível 3: máx 1 hab total de spec (pode ser da sua espec ou de outra com req)
+    // Nível 5: máx 2 habs total
+    const maxHabs = nivel >= 5 ? 2 : 1;
+    if(habsEspec.length >= maxHabs) return;
+    upd("habsEspecializacao", [...habsEspec, habNome]);
+  };
+
+  const habEspecCount = habsEspec.length;
+  const maxHabs = nivel >= 5 ? 2 : 1;
+  const podePegarMais = habEspecCount < maxHabs;
+
+  return (
+    <div style={{marginBottom:8}}>
+      {/* Status atual */}
+      <div style={{border:`1px solid ${espec?"#5a4010":C.border}`,background:espec?"#0d0900":C.bg2,padding:"14px 18px",marginBottom:12}}>
+        <div style={{fontFamily:"'Sora',system-ui,sans-serif",fontSize:9,letterSpacing:3,color:espec?"#c09040":C.grayDark,textTransform:"uppercase",marginBottom:6}}>
+          {espec ? "Especialização Ativa" : "Escolha sua Especialização"}
+        </div>
+        {espec ? (
+          <div>
+            <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:16,color:C.white,marginBottom:6}}>{especAtual?.nome}</div>
+            <div style={{fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:1.8,marginBottom:8}}>
+              {especAtual?.antecedentes.map(a=>`+${a.bonus} ${a.ante}`).join(" · ")}
+            </div>
+            <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              {habsEspec.map(h=>(
+                <span key={h} style={{fontSize:10,padding:"3px 10px",border:`1px solid #8b7030`,background:"#1a1200",color:"#c09040",fontFamily:"'Inter',system-ui,sans-serif",borderRadius:2}}>{h}</span>
+              ))}
+              {habEspecCount===0&&<span style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>Nenhuma habilidade de especialização adquirida ainda.</span>}
+            </div>
+            <div style={{marginTop:8,fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif"}}>
+              {habEspecCount}/{maxHabs} habilidade{maxHabs>1?"s":""} de especialização {nivel<5?"· Nível 5 libera mais uma":""}
+            </div>
+          </div>
+        ) : (
+          <div style={{fontSize:11,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",lineHeight:1.8}}>
+            Clique em uma especialização abaixo para escolher. Ao confirmar, receberá os bônus de antecedentes e poderá escolher {maxHabs} habilidade{maxHabs>1?"s":""}.
+          </div>
+        )}
+      </div>
+
+      {/* Seletor de especialização — pills */}
+      <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:12}}>
+        {ESPECIALIZACOES.map(e=>(
+          <button key={e.id} onClick={()=>setTab(tab===e.id?null:e.id)} style={{
+            background:tab===e.id?C.bg3:"transparent",
+            border:`1px solid ${espec===e.id?"#8b7030":tab===e.id?C.silver:C.border}`,
+            color:espec===e.id?"#c09040":tab===e.id?C.white:C.grayDark,
+            fontFamily:"'Sora',system-ui,sans-serif",fontSize:9,padding:"5px 12px",cursor:"pointer",letterSpacing:1,
+          }}>{e.nome.replace(/^O |^A /,"")}</button>
+        ))}
+      </div>
+
+      {/* Card da especialização aberta */}
+      {visualTab&&(
+        <div style={{border:`1px solid ${C.silver}`,background:C.bg2,padding:"18px 18px",marginBottom:12}}>
+          <div style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:18,color:C.white,marginBottom:4}}>{visualTab.nome}</div>
+          <div style={{fontSize:11,color:"#c09040",fontFamily:"'Inter',system-ui,sans-serif",letterSpacing:1,marginBottom:14}}>
+            {visualTab.antecedentes.map(a=>`+${a.bonus} ${a.ante}`).join(" · ")}
+          </div>
+
+          {/* Habilidades */}
+          <div style={{marginBottom:14}}>
+            {visualTab.habilidades.map(h=>{
+              const metReq = reqMet(h.req, char);
+              const selecionada = habsEspec.includes(h.nome);
+              const deOutraEspec = espec && espec !== visualTab.id;
+              const podeAdquirir = metReq && (podePegarMais || selecionada);
+              return (
+                <div key={h.nome} onClick={()=>podeAdquirir&&toggleHabEspec(h.nome)}
+                  style={{
+                    border:`1px solid ${selecionada?"#8b7030":metReq?C.border:C.bg3}`,
+                    background:selecionada?"#1a1200":metReq?"transparent":C.bg,
+                    padding:"10px 14px",marginBottom:6,cursor:podeAdquirir?"pointer":"default",
+                    opacity:metReq?1:0.5,transition:"all 0.15s",
+                  }}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+                    <div style={{width:14,height:14,borderRadius:"50%",border:`1.5px solid ${selecionada?"#c09040":C.border2}`,background:selecionada?"#c09040":"transparent",flexShrink:0,transition:"all 0.12s"}}/>
+                    <span style={{fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:14,color:selecionada?"#c09040":C.white}}>{h.nome}</span>
+                    {!metReq&&h.req&&<span style={{fontSize:9,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginLeft:4}}>Req: {h.req.ante} {h.req.min}+</span>}
+                    {deOutraEspec&&metReq&&!selecionada&&<span style={{fontSize:9,color:C.silverDim,fontFamily:"'Sora',system-ui,sans-serif",marginLeft:4}}>espec. diferente</span>}
+                  </div>
+                  <div style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:12,color:C.gray,lineHeight:1.8,paddingLeft:22}}>{h.desc}</div>
+                  {!podePegarMais&&!selecionada&&metReq&&(
+                    <div style={{fontSize:9,color:C.grayDark,fontFamily:"'Sora',system-ui,sans-serif",paddingLeft:22,marginTop:4}}>
+                      {nivel<5?"Atingir Nível 5 para desbloquear mais uma habilidade":"Limite de habilidades atingido"}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Botão confirmar/trocar especialização */}
+          {espec !== visualTab.id ? (
+            <button onClick={()=>escolherEspec(visualTab.id)} style={{
+              background:"transparent",border:`1px solid ${C.silver}`,color:C.silver,
+              fontFamily:"'Bricolage Grotesque',system-ui,sans-serif",fontSize:10,letterSpacing:3,
+              textTransform:"uppercase",padding:"7px 20px",cursor:"pointer",
+            }}>
+              {espec ? "⚠ Trocar especialização (reseta habilidades de espec)" : "Confirmar Especialização"}
+            </button>
+          ) : (
+            <div style={{fontSize:10,color:"#50c050",fontFamily:"'Sora',system-ui,sans-serif",letterSpacing:1}}>✓ Especialização ativa — clique nas habilidades para adquiri-las</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CharSheet({char,update}) {
   const [tab,setTab]=useState(0);
   const fileRef=useRef();
@@ -2886,9 +3279,14 @@ function CharSheet({char,update}) {
         {/* ── TAB 2: HABILIDADES ── */}
         {tab===2&&(
           <div>
-            <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:14,letterSpacing:1}}>
+            <div style={{fontSize:10,color:C.grayDark,fontFamily:"'Inter',system-ui,sans-serif",marginTop:14,letterSpacing:1,lineHeight:1.8}}>
               Escolha 2 habilidades no nível 1. Clique no nome para selecionar/deselecionar · ▼ para ver descrição completa.
+              <br/>Nível 3: escolha sua <span style={{color:C.silver}}>Especialização</span> e 1 habilidade dela.
+              Nível 5: adquira a 2ª habilidade da sua especialização (ou 1 de outra, se cumprir o requisito).
             </div>
+
+            <SectionTitle>Especialização</SectionTitle>
+            <EspecializacaoPanel char={char} upd={upd}/>
 
             <SectionTitle>
               Combate — {HABILIDADES_COMBATE.length} habilidades · {char.habilidades.filter(h=>HABILIDADES_COMBATE.find(x=>x.nome===h)).length} selecionadas
@@ -3070,16 +3468,14 @@ function CharSheet({char,update}) {
 
             {/* ── Habilidades ── */}
             <SectionTitle>Habilidades do Companheiro</SectionTitle>
-            <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}}>
+            <div style={{display:"flex",flexDirection:"column",gap:0,marginBottom:10}}>
               {(char.montaria.habilidades||[]).map((h,i)=>(
-                <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"4px 10px",border:`1px solid ${C.silver}`,background:C.bg3}}>
-                  <span style={{fontFamily:"'Inter',system-ui,sans-serif",fontSize:12,color:C.white}}>{h}</span>
-                  <button onClick={()=>updMont("habilidades",char.montaria.habilidades.filter((_,j)=>j!==i))}
-                    style={{background:"transparent",border:"none",color:C.grayDark,cursor:"pointer",fontSize:11,padding:0}}>✕</button>
-                </div>
+                <CompHabCard key={i} h={h}
+                  onUpdate={val=>{const hs=[...char.montaria.habilidades];hs[i]=val;updMont("habilidades",hs);}}
+                  onDelete={()=>updMont("habilidades",char.montaria.habilidades.filter((_,j)=>j!==i))}/>
               ))}
             </div>
-            <AddHabForm onAdd={nome=>updMont("habilidades",[...(char.montaria.habilidades||[]),nome])}/>
+            <AddHabForm onAdd={h=>updMont("habilidades",[...(char.montaria.habilidades||[]),h])}/>
 
             {/* ── Inventário ── */}
             <SectionTitle>Inventário do Companheiro</SectionTitle>
